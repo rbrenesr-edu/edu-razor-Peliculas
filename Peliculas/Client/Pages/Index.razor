@@ -1,13 +1,13 @@
 ﻿@page "/"
 
-
 <p>Hola @StringUtilities.TransformarString(nombre)</p>
 
 <p>Vamos a sumar 2 + 2 = @(2 + 2)</p>
 
-<button @onclick=@( ()=> Console.WriteLine("Me al cliqueado") ) 
+<button @onclick=@( ()=> Console.WriteLine("Me al cliqueado") )
         class="btn btn-outline-primary">
-Presioname </button>
+    Presioname
+</button>
 
 <button @onclick=@ManejaClic
         class="btn btn-outline-primary">
@@ -22,7 +22,7 @@ Presioname </button>
 <h3>Película</h3>
 <p>Título: @W.Titulo</p>
 <p>Título 2: @ObtenerPelicula().Titulo2</p>
-<p>Fecha Lanzamiento: @W.FechaLanzamiento</p>
+<p>Fecha Lanzamiento: @W.FechaLanzamiento.ToString("dd MMM yyyy")</p>
 
 
 <br />
@@ -31,13 +31,38 @@ Presioname </button>
 
 <div>
     <h3>Películas (forecha)</h3>
-    @foreach (var pelicula in ObtenerPeliculas())
-    {
-        <div>
-            <p>Título: <b>@pelicula.Titulo</b></p>
-            <p>Fecha Lanzamiento: <b>@pelicula.FechaLanzamiento</b></p>
-        </div>
+
+    @if (Peliculas is null)
+    {        
+        <img
+            alt="Cargando"
+             src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
     }
+    else if (Peliculas.Count < 1)
+    {
+        <p>
+            No hay películas para mostrar.
+        </p>
+    }
+    else
+    {
+        @foreach (var pelicula in Peliculas)
+        {
+            <div>
+                <p>
+                    Título: <b>@pelicula.Titulo</b>
+                    @if (DateTime.Today.Subtract(pelicula.FechaLanzamiento).Days <= 14)
+                    {
+                        <span style="color:red"> ¡New!</span>
+                    }
+                </p>
+
+                <p>Fecha Lanzamiento: <b>@pelicula.FechaLanzamiento.ToString("dd MMM yyyy")</b></p>
+            </div>
+        }
+    }
+
+
 </div>
 
 <br />
@@ -46,24 +71,43 @@ Presioname </button>
 
 <div>
     <h3>Peículas (for)</h3>
-    @for (int i = 0; i < Peliculas.Count; i++)
+
+    @if (Peliculas is null)
     {
-        <div>            
-            <p><b>@(i + 1)) </b>Título: <b>@Peliculas[i].Titulo</b></p>
-            <p>Fecha Lanzamiento: <b>@Peliculas[i].FechaLanzamiento</b></p>
-        </div>
+        <img alt="Cargando"
+             src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+    }
+    else
+    {
+
+        @for (int i = 0; i < Peliculas.Count; i++)
+        {
+            <div>
+                <p><b>@(i + 1)) </b>Título: <b>@Peliculas[i].Titulo</b></p>
+                <p>Fecha Lanzamiento: <b>@Peliculas[i].FechaLanzamiento.ToString("dd MMM yyyy")</b></p>
+            </div>
+        }
     }
 </div>
 
 
 
-@code{
+
+
+@code {
     string nombre = "Julieth Brenes";
-
-
-    Pelicula W  { get { return ObtenerPelicula(); } }
-    List<Pelicula> Peliculas { get { return ObtenerPeliculas(); } }
-
+    Pelicula W { get { return ObtenerPelicula(); } }
+    List<Pelicula>? Peliculas { get; set; }
+    List<Pelicula> ObtenerPeliculas()
+    {
+        //return new List<Pelicula>();
+        return new List<Pelicula>()
+        {
+            new Pelicula { Titulo = "Wakanda Forever", FechaLanzamiento = new DateTime(2022,11,11) },
+            new Pelicula { Titulo = "Moana", FechaLanzamiento = new DateTime(2023,09,23) },
+            new Pelicula { Titulo = "Inception", FechaLanzamiento = new DateTime(2010,07,16) }
+        };
+    }
     Pelicula ObtenerPelicula()
     {
         return new Pelicula
@@ -71,25 +115,20 @@ Presioname </button>
                 Titulo = "Wakanda Forever",
                 Titulo2 = "Wakanda Forever2",
                 FechaLanzamiento = new DateTime(2022, 11, 11)
-            };    
+            };
     }
 
-    List<Pelicula> ObtenerPeliculas()
+    protected override async Task OnInitializedAsync()
     {
-        return new List<Pelicula>()
-        {
-            new Pelicula { Titulo = "Wakanda Forever", FechaLanzamiento = DateTime.Now },
-            new Pelicula { Titulo = "Moana", FechaLanzamiento = DateTime.Now },
-            new Pelicula { Titulo = "Inception", FechaLanzamiento = DateTime.Now }
-        };    
+        await Task.Delay(1000);
+        Peliculas = ObtenerPeliculas();
     }
-
-
 
 
 
     void ManejaClic()
     {
         Console.WriteLine("Me al cliqueado desde una funcion");
+
     }
 }

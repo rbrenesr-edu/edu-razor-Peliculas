@@ -1,7 +1,95 @@
 ﻿@page "/"
 
-<p>Hola @nombre</p>
+
+<p>Hola @StringUtilities.TransformarString(nombre)</p>
+
+<p>Vamos a sumar 2 + 2 = @(2 + 2)</p>
+
+<button @onclick=@( ()=> Console.WriteLine("Me al cliqueado") ) 
+        class="btn btn-outline-primary">
+Presioname </button>
+
+<button @onclick=@ManejaClic
+        class="btn btn-outline-primary">
+    Presioname desde metodo
+</button>
+
+
+<br />
+<hr />
+<br />
+
+<h3>Película</h3>
+<p>Título: @W.Titulo</p>
+<p>Título 2: @ObtenerPelicula().Titulo2</p>
+<p>Fecha Lanzamiento: @W.FechaLanzamiento</p>
+
+
+<br />
+<hr />
+<br />
+
+<div>
+    <h3>Películas (forecha)</h3>
+    @foreach (var pelicula in ObtenerPeliculas())
+    {
+        <div>
+            <p>Título: <b>@pelicula.Titulo</b></p>
+            <p>Fecha Lanzamiento: <b>@pelicula.FechaLanzamiento</b></p>
+        </div>
+    }
+</div>
+
+<br />
+<hr />
+<br />
+
+<div>
+    <h3>Peículas (for)</h3>
+    @for (int i = 0; i < Peliculas.Count; i++)
+    {
+        <div>            
+            <p><b>@(i + 1)) </b>Título: <b>@Peliculas[i].Titulo</b></p>
+            <p>Fecha Lanzamiento: <b>@Peliculas[i].FechaLanzamiento</b></p>
+        </div>
+    }
+</div>
+
+
 
 @code{
-    string nombre = "R Brenes";
+    string nombre = "Julieth Brenes";
+
+
+    Pelicula W  { get { return ObtenerPelicula(); } }
+    List<Pelicula> Peliculas { get { return ObtenerPeliculas(); } }
+
+    Pelicula ObtenerPelicula()
+    {
+        return new Pelicula
+            {
+                Titulo = "Wakanda Forever",
+                Titulo2 = "Wakanda Forever2",
+                FechaLanzamiento = new DateTime(2022, 11, 11)
+            };    
+    }
+
+    List<Pelicula> ObtenerPeliculas()
+    {
+        return new List<Pelicula>()
+        {
+            new Pelicula { Titulo = "Wakanda Forever", FechaLanzamiento = DateTime.Now },
+            new Pelicula { Titulo = "Moana", FechaLanzamiento = DateTime.Now },
+            new Pelicula { Titulo = "Inception", FechaLanzamiento = DateTime.Now }
+        };    
+    }
+
+
+
+
+
+    void ManejaClic()
+    {
+        Console.WriteLine("Me al cliqueado desde una funcion");
+    }
 }

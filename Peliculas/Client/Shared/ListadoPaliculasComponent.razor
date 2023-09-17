@@ -1,0 +1,35 @@
+﻿<div class="mt-3">
+
+@if (Peliculas is null)
+{
+    <img alt="Cargando"
+         src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+}
+else if (Peliculas.Count < 1)
+{
+    <p>
+        No hay películas para mostrar.
+    </p>
+}
+else
+{
+    @foreach (var pelicula in Peliculas)
+    {
+        <PeliculaComponent Pelicula=pelicula />
+    }
+} 
+</div>
+
+@code {
+
+    [Parameter]
+    [EditorRequired]
+    public List<Pelicula>? Peliculas { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(500);        
+    }
+
+
+}

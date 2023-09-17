@@ -2,13 +2,20 @@
 
 <div>
     <h3>Películas</h3>
-    <ListadoPaliculas />
-
+    <ListadoPaliculasComponent Peliculas=ObtenerPeliculas() />    
 </div>
 
 
 
 
 @code {
-
+    List<Pelicula> ObtenerPeliculas()
+    {
+        return new List<Pelicula>()
+            {
+                new Pelicula{ Titulo = "Wakanda Forever", FechaLanzamiento = new DateTime(2016,11,25) },
+                new Pelicula{ Titulo = "Moana", FechaLanzamiento = new DateTime(2020,10,25) },
+                new Pelicula{ Titulo = "inception", FechaLanzamiento = new DateTime(2023,9,15) }
+            };
+    }
 }

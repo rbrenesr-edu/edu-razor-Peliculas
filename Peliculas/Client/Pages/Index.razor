@@ -50,7 +50,7 @@
         {
             <div>
                 <p>
-                    Título: <b>@pelicula.Titulo</b>
+                    Título: @((MarkupString)pelicula.Titulo)
                     @if (DateTime.Today.Subtract(pelicula.FechaLanzamiento).Days <= 14)
                     {
                         <span style="color:red"> ¡New!</span>
@@ -83,7 +83,7 @@
         @for (int i = 0; i < Peliculas.Count; i++)
         {
             <div>
-                <p><b>@(i + 1)) </b>Título: <b>@Peliculas[i].Titulo</b></p>
+                <p><b>@(i + 1)) </b>Título: @((MarkupString)Peliculas[i].Titulo)</p>
                 <p>Fecha Lanzamiento: <b>@Peliculas[i].FechaLanzamiento.ToString("dd MMM yyyy")</b></p>
             </div>
         }
@@ -103,8 +103,8 @@
         //return new List<Pelicula>();
         return new List<Pelicula>()
         {
-            new Pelicula { Titulo = "Wakanda Forever", FechaLanzamiento = new DateTime(2022,11,11) },
-            new Pelicula { Titulo = "Moana", FechaLanzamiento = new DateTime(2023,09,23) },
+            new Pelicula { Titulo = "<b>Wakanda Forever</b>", FechaLanzamiento = new DateTime(2022,11,11) },
+            new Pelicula { Titulo = "<i>Moana</i>", FechaLanzamiento = new DateTime(2023,09,23) },
             new Pelicula { Titulo = "Inception", FechaLanzamiento = new DateTime(2010,07,16) }
         };
     }

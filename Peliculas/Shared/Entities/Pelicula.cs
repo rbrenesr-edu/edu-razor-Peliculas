@@ -10,9 +10,7 @@ namespace Peliculas.Shared.Entities
     {
         //public string? Titulo { get; set; }
         //public required string Titulo { get; set; }
-        public string Titulo { get; set; } = null!;
-        public string Titulo2 { get; set; } = null!;
-
+        public string Titulo { get; set; } = null!;        
         public DateTime FechaLanzamiento { get; set; }
     }
 }

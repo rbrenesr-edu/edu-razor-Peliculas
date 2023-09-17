@@ -13,9 +13,14 @@ else if (Peliculas.Count < 1)
 }
 else
 {
+    <div>
+        <input type="checkbox"  @onchange="@( ()=> MostrarBotones = !MostrarBotones )"/>
+        <span>Mostrar botones</span>
+    </div>    
+
     @foreach (var pelicula in Peliculas)
     {
-        <PeliculaComponent Pelicula=pelicula />
+            <PeliculaComponent Pelicula=pelicula MostrarBotones="MostrarBotones" />
     }
 } 
 </div>
@@ -25,6 +30,8 @@ else
     [Parameter]
     [EditorRequired]
     public List<Pelicula>? Peliculas { get; set; }
+
+    bool MostrarBotones = false;
 
     protected override async Task OnInitializedAsync()
     {

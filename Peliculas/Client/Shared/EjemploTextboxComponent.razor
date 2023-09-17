@@ -1,0 +1,15 @@
+﻿
+
+<div>
+    <input 
+        class="form-control" 
+        type="text" 
+        placeholder="Placeholder por defecto"
+        @attributes="ParametrosAdicionales" 
+        />
+</div>
+
+@code {
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object> ParametrosAdicionales { get; set; } = null!;
+}

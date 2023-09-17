@@ -2,13 +2,32 @@
 
 <div>
     <h3>Películas</h3>
-    <ListadoPaliculasComponent Peliculas=ObtenerPeliculas() />    
+    <ListadoPaliculasComponent Peliculas=ObtenerPeliculas() />
+</div>
+
+<div>
+    <EjemploTextboxComponent placeholder="Nombre película" />
+    <EjemploTextboxComponent placeholder="Nombre película" disabled="true" />
+    <EjemploTextboxComponent @attributes=@(new Dictionary<string, object>(){
+                             {"placeholder","Peliculas PH Dictionary"},
+                             {"disabled","true"}
+                             }) />
+    <EjemploTextboxComponent @attributes="Atributos" />
+    <EjemploTextboxComponent placeholder="Nombre película" disabled="true" />
+    <EjemploTextboxComponent placeholder="Placeholder index" />
 </div>
 
 
 
 
+
 @code {
+    public Dictionary<string, object> Atributos = 
+    new Dictionary<string, object>(){
+                                        {"placeholder","Peliculas PH"},
+                                        {"disabled","true"}
+                                    };
+
     List<Pelicula> ObtenerPeliculas()
     {
         return new List<Pelicula>()

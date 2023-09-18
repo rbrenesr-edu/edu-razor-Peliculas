@@ -1,0 +1,13 @@
+﻿
+<div>
+    <input type="text" @bind="TextoValor" @bind:event="oninput" />
+</div>
+
+<div>
+    <p>Este es el texto cargado: @TextoValor </p>
+</div>
+
+
+@code {
+    private string TextoValor { get; set; } = "";
+}

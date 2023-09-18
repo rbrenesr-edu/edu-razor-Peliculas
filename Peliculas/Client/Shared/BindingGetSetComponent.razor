@@ -1,0 +1,16 @@
+﻿<div>
+
+    <h3>BindingGetSetComponent</h3>
+    <input type="text" @bind:get="texto" @bind:set="SetAsync" @bind:event="oninput"  />
+    <p>Texto: @texto</p>
+</div>
+
+@code {
+    public string texto { get; set; } = "";
+
+    private Task SetAsync(string valor)
+    {
+        texto = valor.ToUpper();
+        return Task.CompletedTask;
+    }
+}

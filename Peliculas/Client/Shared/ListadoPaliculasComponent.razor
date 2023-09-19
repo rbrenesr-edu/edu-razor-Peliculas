@@ -21,7 +21,10 @@ else
 
     @foreach (var pelicula in Peliculas)
     {
-            <PeliculaComponent Pelicula=pelicula MostrarBotones="MostrarBotones" />
+            <PeliculaComponent 
+                Pelicula=pelicula 
+                MostrarBotones="MostrarBotones" 
+                EliminarPelicula="ElininarPelicula"/>
     }
 } 
 </div>
@@ -33,6 +36,12 @@ else
     public List<Pelicula>? Peliculas { get; set; }
 
     bool MostrarBotones = false;
+
+    private void ElininarPelicula( Pelicula pelicula )
+    {
+        Peliculas!.Remove(pelicula);
+        
+    }
 
     protected override async Task OnInitializedAsync()
     {

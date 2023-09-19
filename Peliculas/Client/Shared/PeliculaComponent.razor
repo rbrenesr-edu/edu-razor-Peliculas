@@ -11,8 +11,18 @@
 
     @if (MostrarBotones)
     {
-        <button class="btn btn-outline-dark"
+        @* <button class="btn btn-outline-dark"
         @onclick="Eliminar">
+            Borrar
+        </button> *@
+        
+        @* <button class="btn btn-outline-dark"
+        @onclick="EliminarPelicula">
+            Borrar
+        </button> *@
+        
+        <button class="btn btn-outline-dark"
+        @onclick="@( ()=> EliminarPelicula.InvokeAsync( Pelicula) )">
             Borrar
         </button>
     }
@@ -28,8 +38,11 @@
     [Parameter]
     public bool MostrarBotones { get; set; } = false;
 
-    private void Eliminar()
-    {
-        Console.WriteLine($"Eliminando la pelicula {Pelicula.Titulo} ");
-    }
+    [Parameter]
+    public EventCallback<Pelicula> EliminarPelicula { get; set; }
+
+    // private void Eliminar()
+    // {
+    //     Console.WriteLine($"Eliminando la pelicula {Pelicula.Titulo} ");
+    // }
 }

@@ -2,8 +2,9 @@
 
 @if (Peliculas is null)
 {
-    <img alt="Cargando"
-         src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+@*     <img alt="Cargando"
+         src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" /> *@
+         @ChildContent;
 }
 else if (Peliculas.Count < 1)
 {
@@ -30,23 +31,31 @@ else
 </div>
 
 @code {
+    protected override async Task OnInitializedAsync()    
+    {
+        await Task.Delay(3000);        
+    }
+
+    #region Parameters
 
     [Parameter]
     [EditorRequired]
     public List<Pelicula>? Peliculas { get; set; }
 
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    #endregion
+
+
     bool MostrarBotones = false;
 
     private void ElininarPelicula( Pelicula pelicula )
     {
-        Peliculas!.Remove(pelicula);
-        
+        Peliculas!.Remove(pelicula);        
     }
 
-    protected override async Task OnInitializedAsync()
-    {
-        await Task.Delay(500);        
-    }
+
 
 
 }

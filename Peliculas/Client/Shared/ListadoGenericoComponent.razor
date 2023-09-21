@@ -1,0 +1,59 @@
+﻿@typeparam Titem
+
+@if (Listado is null)
+{
+    @*     <img alt="Cargando"
+    src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" /> *@
+
+
+    if (CargandoRenderFragment == null)
+    {
+        <img alt="Cargando"
+             src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+    }
+    else
+    {
+        @CargandoRenderFragment
+        ;
+    }
+
+}
+else if (Listado.Count < 1)
+{
+    @* <p>
+    No hay películas para mostrar.
+    </p> *@
+
+
+    if (SinPeliculasRenderFragment is null)
+    {
+        <p>
+            No hay películas para mostrar.
+        </p>
+    }
+    else
+    {
+        @SinPeliculasRenderFragment
+    }
+}else
+{
+    @foreach (var elemento in Listado)
+    {
+        @HayRegistros(elemento)
+    }
+}
+
+@code {
+
+    [Parameter]
+    public RenderFragment? CargandoRenderFragment { get; set; }
+
+    [Parameter]
+    public RenderFragment? SinPeliculasRenderFragment { get; set; }
+
+    [Parameter][EditorRequired]
+    public List<Titem>? Listado { get; set; }
+
+    [Parameter]
+    public RenderFragment<Titem> HayRegistros { get; set; } = null!;
+}

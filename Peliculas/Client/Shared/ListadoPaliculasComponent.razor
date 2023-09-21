@@ -1,56 +1,26 @@
 ﻿<div class="mt-3">
 
-    @if (Peliculas is null)
-    {
-        @*     <img alt="Cargando"
-    src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" /> *@
+
+  
+    <div>
+        @* <input type="checkbox"  @onchange="@( ()=> MostrarBotones = !MostrarBotones )"/> *@
+        <input type="checkbox" @bind="MostrarBotones" />
+        <span>Mostrar botones</span>
+    </div>
 
 
-        if (CargandoRenderFragment == null)
-        {
-            <img alt="Cargando"
-                 src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
-        }
-        else
-        {
-            @CargandoRenderFragment
-            ;
-        }
 
-    }
-    else if (Peliculas.Count < 1)
-    {
-        @* <p>
-    No hay películas para mostrar.
-    </p> *@
-
-
-        if (SinPeliculasRenderFragment is null)
-        {
-            <p>
-                No hay películas para mostrar.
-            </p>
-        }
-        else
-        {
-            @SinPeliculasRenderFragment
-        }
-    }
-    else
-    {
-        <div>
-            @* <input type="checkbox"  @onchange="@( ()=> MostrarBotones = !MostrarBotones )"/> *@
-            <input type="checkbox" @bind="MostrarBotones" />
-            <span>Mostrar botones</span>
-        </div>
-
-        @foreach (var pelicula in Peliculas)
-        {
+    <ListadoGenericoComponent Listado="Peliculas">
+        <HayRegistros Context="pelicula">
             <PeliculaComponent Pelicula=pelicula
                                MostrarBotones="MostrarBotones"
                                EliminarPelicula="ElininarPelicula" />
-        }
-    }
+        </HayRegistros>
+    </ListadoGenericoComponent>
+
+
+
+    
 </div>
 
 @code {
@@ -69,11 +39,6 @@
     // [Parameter]
     // public RenderFragment? ChildContent { get; set; }
 
-    [Parameter]
-    public RenderFragment? CargandoRenderFragment { get; set; }
-
-    [Parameter]
-    public RenderFragment? SinPeliculasRenderFragment { get; set; }
 
     #endregion
 

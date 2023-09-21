@@ -2,11 +2,10 @@
 
 <div>
     <h3>Películas</h3>
-    @* <ListadoPaliculasComponent Peliculas=ObtenerPeliculas() /> *@
-    <ListadoPaliculasComponent Peliculas=PeliculaList>
-        <img alt="Cargando"
-             src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
-             <button>sfgsrfg</button>
+    @* <ListadoPaliculasComponent Peliculas=ObtenerPeliculas() />     *@
+    <ListadoPaliculasComponent Peliculas=ObtenerPeliculas()>            
+        <CargandoRenderFragment>Cargando...</CargandoRenderFragment>
+        <SinPeliculasRenderFragment>NO HAY PELICULAS</SinPeliculasRenderFragment>              
     </ListadoPaliculasComponent>
 </div>
 
@@ -35,45 +34,22 @@
 
 
 
-@code {
-
-    public List<Pelicula>? PeliculaList { get; set; }
-
-    public Dictionary<string, object> Atributos = 
+@code {    
+    public Dictionary<string, object> Atributos =
     new Dictionary<string, object>(){
                                         {"placeholder","Peliculas PH"},
                                         {"disabled","true"}
-                                    };
+                                        };
 
-    //List<Pelicula> ObtenerPeliculas()
-    async Task ObtenerPeliculas()
+    List<Pelicula> ObtenerPeliculas()
     {
-        await Task.Delay(3000);
-        
-        PeliculaList = new List<Pelicula>()
-        {
-            new Pelicula { Titulo = "Wakanda Forever", FechaLanzamiento = new DateTime(2016, 11, 25) },
-            new Pelicula { Titulo = "Moana", FechaLanzamiento = new DateTime(2020, 10, 25) },
-            new Pelicula { Titulo = "inception", FechaLanzamiento = new DateTime(2023, 9, 15) }
+
+        return new List<Pelicula>()
+            {
+                new Pelicula{ Titulo = "Wakanda Forever", FechaLanzamiento = new DateTime(2016,11,25) },
+                new Pelicula{ Titulo = "Moana", FechaLanzamiento = new DateTime(2020,10,25) },
+                new Pelicula{ Titulo = "inception", FechaLanzamiento = new DateTime(2023,9,15) }
             };
-
-
-
-        // return new List<Pelicula>()
-        //     {
-        //         new Pelicula{ Titulo = "Wakanda Forever", FechaLanzamiento = new DateTime(2016,11,25) },
-        //         new Pelicula{ Titulo = "Moana", FechaLanzamiento = new DateTime(2020,10,25) },
-        //         new Pelicula{ Titulo = "inception", FechaLanzamiento = new DateTime(2023,9,15) }
-        //     };
-
-
-
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-//        await Task.Delay(3000);
-        await ObtenerPeliculas();
     }
 
 }

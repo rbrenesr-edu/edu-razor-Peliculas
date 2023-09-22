@@ -1,6 +1,6 @@
 ﻿@page "/"
 @inject ServicioSingleton servicioSingleton;
-
+@inject IRepositorio repositorio;
 
 <p>
     @servicioSingleton.Valor
@@ -37,7 +37,7 @@
 
 
 
-@code {    
+@code {
     public Dictionary<string, object> Atributos =
     new Dictionary<string, object>(){
                                         {"placeholder","Peliculas PH"},
@@ -46,13 +46,7 @@
 
     List<Pelicula> ObtenerPeliculas()
     {
-
-        return new List<Pelicula>()
-            {
-                new Pelicula{ Titulo = "Wakanda Forever", FechaLanzamiento = new DateTime(2016,11,25) },
-                new Pelicula{ Titulo = "Moana", FechaLanzamiento = new DateTime(2020,10,25) },
-                new Pelicula{ Titulo = "inception", FechaLanzamiento = new DateTime(2023,9,15) }
-            };
+        return repositorio.ObtenerPeliculas();
     }
 
 }

@@ -1,14 +1,18 @@
 ﻿@page "/counter"
+@inject ServicioSingleton servicioSingleton;
+@inject ServicioTransient servicioTransient;
 
 <PageTitle>Counter</PageTitle>
 
 <h1>Counter</h1>
 
 <p role="status">Current count: @currentCount</p>
+<p role="status">Singleton count: @servicioSingleton.Valor</p>
+<p role="status">Transient count: @servicioTransient.Valor</p>
+
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
-<ListadoPaliculasComponent Peliculas=ObtenerPeliculas() /> 
 
 @code {
     private int currentCount = 0;
@@ -16,14 +20,8 @@
     private void IncrementCount()
     {
         currentCount++;
+        servicioSingleton.Valor = currentCount;
+        servicioTransient.Valor = currentCount;
     }
 
-    List<Pelicula> ObtenerPeliculas()
-    {
-        return new List<Pelicula>()
-            {
-                new Pelicula{ Titulo = "Spider-Man: Far From Home", FechaLanzamiento = new DateTime(2016,11,25) },
-                new Pelicula{ Titulo = "Avengers Endgame", FechaLanzamiento = new DateTime(2020,10,25) }                
-            };
-    }
 }

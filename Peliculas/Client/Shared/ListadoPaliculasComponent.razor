@@ -42,7 +42,8 @@
 
     private async Task ElininarPelicula(Pelicula pelicula)
     {
-        bool confirmado = await js.InvokeAsync<bool>("confirm", $"Desea eliminar la película? {pelicula.Titulo}");
+        bool confirmado = await js.Confirm($"Desea borrar la pelicula {pelicula.Titulo } ?");
+        js.Clg("Texto");
 
         if (confirmado)
         {

@@ -19,10 +19,6 @@
 </div>
 
 @code {
-    protected override async Task OnInitializedAsync()
-    {
-        await Task.Delay(3000);
-    }
 
     #region Parameters
 
@@ -40,6 +36,14 @@
 
     bool MostrarBotones = false;
 
+    public void LimpiarPeliculas()
+    {
+        if (Peliculas is not null)
+        {
+            Peliculas.Clear();
+        }
+    }
+
     private async Task ElininarPelicula(Pelicula pelicula)
     {
         bool confirmado = await js.Confirm($"Desea borrar la pelicula {pelicula.Titulo } ?");
@@ -52,6 +56,11 @@
 
     }
 
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(3000);
+    }
+
     protected override void OnInitialized()
     {
         Console.WriteLine("OnInitialized");
@@ -61,7 +70,6 @@
     {
         Console.WriteLine("OnParametersSet");
     }
-
 
     protected override void OnAfterRender(bool firstRender)
     {

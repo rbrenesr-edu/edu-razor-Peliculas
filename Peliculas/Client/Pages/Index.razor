@@ -11,11 +11,7 @@
     @servicioSingleton.Valor
 </p>
 
-<div>
-    <h3>Películas</h3>
-    @* <ListadoPaliculasComponent Peliculas=ObtenerPeliculas() />     *@
-    <ListadoPaliculasComponent Peliculas=ObtenerPeliculas() />  
-</div>
+
 
 <hr />
 
@@ -39,7 +35,15 @@
 
 <BindingGetSetComponent />
 
+<div>
+    <button @onclick="LimpiarPeliculas" class="btn btn-outline-primary">Limpiar peliculas</button>
+</div>
 
+<div>
+    <h3>Películas</h3>
+    @* <ListadoPaliculasComponent Peliculas=ObtenerPeliculas() />     *@
+    <ListadoPaliculasComponent @ref="listadoPaliculasComponent" Peliculas=ObtenerPeliculas() />
+</div>
 
 
 @code {
@@ -49,9 +53,17 @@
                                         {"disabled","true"}
                                         };
 
+
+    public ListadoPaliculasComponent? listadoPaliculasComponent;
+
     List<Pelicula> ObtenerPeliculas()
     {
         return repositorio.ObtenerPeliculas();
+    }
+
+    private void LimpiarPeliculas()
+    {
+        listadoPaliculasComponent!.LimpiarPeliculas();
     }
 
 }

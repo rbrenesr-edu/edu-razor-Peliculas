@@ -1,14 +1,12 @@
-﻿<div class="mt-3">
+﻿@inject IJSRuntime js;
 
+<div class="mt-3">
 
-  
     <div>
         @* <input type="checkbox"  @onchange="@( ()=> MostrarBotones = !MostrarBotones )"/> *@
         <input type="checkbox" @bind="MostrarBotones" />
         <span>Mostrar botones</span>
     </div>
-
-
 
     <ListadoGenericoComponent Listado="Peliculas">
         <HayRegistros Context="pelicula">
@@ -18,9 +16,6 @@
         </HayRegistros>
     </ListadoGenericoComponent>
 
-
-
-    
 </div>
 
 @code {
@@ -45,9 +40,15 @@
 
     bool MostrarBotones = false;
 
-    private void ElininarPelicula(Pelicula pelicula)
+    private async Task ElininarPelicula(Pelicula pelicula)
     {
-        Peliculas!.Remove(pelicula);
+        bool confirmado = await js.InvokeAsync<bool>("confirm", $"Desea eliminar la película? {pelicula.Titulo}");
+
+        if (confirmado)
+        {
+            Peliculas!.Remove(pelicula);
+        }
+
     }
 
     protected override void OnInitialized()

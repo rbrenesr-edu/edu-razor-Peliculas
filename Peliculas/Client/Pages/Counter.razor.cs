@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Microsoft.JSInterop.Implementation;
+using Peliculas.Client.Helpers;
 using System.Runtime.Serialization;
 
 namespace Peliculas.Client.Pages
@@ -10,6 +11,7 @@ namespace Peliculas.Client.Pages
         [Inject] ServicioSingleton servicioSingleton { get; set; } = null!;
         [Inject] ServicioTransient servicioTransient { get; set; } = null!;
         [Inject] IJSRuntime js { get; set; } = null!;
+        [CascadingParameter(Name = "appState")] protected AppState appState { get; set; } = null!;
 
         IJSObjectReference jsObjectReference { get; set; } = null!;
         

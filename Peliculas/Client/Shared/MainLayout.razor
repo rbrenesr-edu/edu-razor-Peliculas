@@ -11,7 +11,13 @@
         </div>
 
         <article class="content px-4">
-            @Body
+            <CascadingValue Value="@appState" Name="appState">
+                @Body
+            </CascadingValue>
         </article>
     </main>
 </div>
+
+@code{
+    AppState appState = new AppState();
+}

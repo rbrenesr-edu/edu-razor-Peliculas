@@ -4,3 +4,8 @@ function testNetStatic() {
             console.log('Conteo desde JS: ' + result);
         })
 }
+
+
+function testNetInstancia(dotNetHelper) {
+    dotNetHelper.invokeMethodAsync("IncrementCount");        
+}

@@ -15,7 +15,8 @@ namespace Peliculas.Client.Pages
         private int currentCount = 0;
         private static int currentCountStatic = 0;
 
-        private async void IncrementCount()
+        [JSInvokable]
+        public async Task IncrementCount()
         {
             currentCount++;
             currentCountStatic = currentCount;
@@ -23,6 +24,14 @@ namespace Peliculas.Client.Pages
             servicioTransient.Valor = currentCount;
             await js.InvokeVoidAsync("testNetStatic");
         }
+
+     
+        private async Task IncrementCountJavaScript()
+        {            
+            await js.InvokeVoidAsync("testNetInstancia",
+                DotNetObjectReference.Create(this));
+        }
+
 
 
         [JSInvokable]

@@ -20,7 +20,8 @@ namespace Peliculas.Client.Pages
         public async Task IncrementCount()
         {
             
-            await jsObjectReference.InvokeVoidAsync("MostrarAlerta", "Mostrando una alerta desde modulo de js");
+            await jsObjectReference.InvokeVoidAsync("MostrarAlerta", 
+                "Mostrando una alerta desde modulo de js");
 
             currentCount++;
             currentCountStatic = currentCount;

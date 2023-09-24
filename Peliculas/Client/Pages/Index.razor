@@ -1,69 +1,22 @@
 ﻿@page "/"
-@inject ServicioSingleton servicioSingleton;
 @inject IRepositorio repositorio;
 
 <PageTitle>Blazor Películas</PageTitle>
-<HeadContent>
-    <meta name="description" content="Página para visualizar películas" />
-</HeadContent>
-
-<p>
-    @servicioSingleton.Valor
-</p>
-
-
-
-<hr />
-
-<BindAfterComponent />
-
-<div>
-    <EjemploTextboxComponent placeholder="Nombre película" />
-    <EjemploTextboxComponent placeholder="Nombre película" disabled="true" />
-    <EjemploTextboxComponent @attributes=@(new Dictionary<string, object>(){
-                             {"placeholder","Peliculas PH Dictionary"},
-                             {"disabled","true"}
-                             }) />
-    <EjemploTextboxComponent @attributes="Atributos" />
-    <EjemploTextboxComponent placeholder="Nombre película" disabled="true" />
-    <EjemploTextboxComponent placeholder="Placeholder index" />
-</div>
-
-<BindingComponent />
-
-<hr />
-
-<BindingGetSetComponent />
-
-<div>
-    <button @onclick="LimpiarPeliculas" class="btn btn-outline-primary">Limpiar peliculas</button>
-</div>
 
 <div>
     <h3>Películas</h3>
-    @* <ListadoPaliculasComponent Peliculas=ObtenerPeliculas() />     *@
-    <ListadoPaliculasComponent @ref="listadoPaliculasComponent" Peliculas=ObtenerPeliculas() />
+    <ListadoPaliculasComponent Peliculas="Peliculas" />
 </div>
 
 
 @code {
-    public Dictionary<string, object> Atributos =
-    new Dictionary<string, object>(){
-                                        {"placeholder","Peliculas PH"},
-                                        {"disabled","true"}
-                                        };
 
+    public List<Pelicula>? Peliculas { get; set; }
 
-    public ListadoPaliculasComponent? listadoPaliculasComponent;
-
-    List<Pelicula> ObtenerPeliculas()
+ 
+    protected override void OnInitialized()
     {
-        return repositorio.ObtenerPeliculas();
-    }
-
-    private void LimpiarPeliculas()
-    {
-        listadoPaliculasComponent!.LimpiarPeliculas();
+        Peliculas = repositorio.ObtenerPeliculas();
     }
 
 }

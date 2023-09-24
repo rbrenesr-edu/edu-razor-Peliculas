@@ -1,17 +1,10 @@
 ﻿@inject IJSRuntime js;
 
-<div class="mt-3">
-
-    <div>
-        @* <input type="checkbox"  @onchange="@( ()=> MostrarBotones = !MostrarBotones )"/> *@
-        <input type="checkbox" @bind="MostrarBotones" />
-        <span>Mostrar botones</span>
-    </div>
+<div style="display:flex; flex-wrap:wrap; align-items:center;">
 
     <ListadoGenericoComponent Listado="Peliculas">
         <HayRegistros Context="pelicula">
-            <PeliculaComponent Pelicula=pelicula
-                               MostrarBotones="MostrarBotones"
+            <PeliculaComponent Pelicula=pelicula                              
                                EliminarPelicula="ElininarPelicula" />
         </HayRegistros>
     </ListadoGenericoComponent>
@@ -20,29 +13,12 @@
 
 @code {
 
-    #region Parameters
+
 
     [Parameter]
     [EditorRequired]
     public List<Pelicula>? Peliculas { get; set; }
 
-    /*Es la forma de declarar un RenderFragment por default*/
-    // [Parameter]
-    // public RenderFragment? ChildContent { get; set; }
-
-
-    #endregion
-
-
-    bool MostrarBotones = false;
-
-    public void LimpiarPeliculas()
-    {
-        if (Peliculas is not null)
-        {
-            Peliculas.Clear();
-        }
-    }
 
     private async Task ElininarPelicula(Pelicula pelicula)
     {
@@ -56,30 +32,5 @@
 
     }
 
-    protected override async Task OnInitializedAsync()
-    {
-        await Task.Delay(3000);
-    }
 
-    protected override void OnInitialized()
-    {
-        Console.WriteLine("OnInitialized");
-    }
-
-    protected override void OnParametersSet()
-    {
-        Console.WriteLine("OnParametersSet");
-    }
-
-    protected override void OnAfterRender(bool firstRender)
-    {
-        Console.WriteLine("OnAfterRender: Primera vez" + firstRender);
-    }
-
-    protected override bool ShouldRender()
-    {
-        Console.WriteLine("ShouldRender");
-        //return base.ShouldRender();
-        return true;
-    }
 }

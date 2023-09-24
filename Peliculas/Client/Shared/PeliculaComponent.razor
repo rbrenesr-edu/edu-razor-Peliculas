@@ -1,33 +1,18 @@
-﻿<div class="m-5">
-    <p>
-        Título: <b>@Pelicula.Titulo</b>
-        @if (DateTime.Today.Subtract(Pelicula.FechaLanzamiento).Days <= 14)
-        {
-            <span style="color:red"> ¡New!</span>
-        }
+﻿<div class="me-2 mb-2" style="text-align: center">
+    <a>
+        <img src="@Pelicula.Poster" alt="poster" style="width: 225px; height: 300px;"/>
+    </a>
+    <p style="max-width: 225px; height: 44px; font-size: 15px; font-weight: bold;">
+        @Pelicula.Titulo
     </p>
-
-    <p>Fecha Lanzamiento: <b>@Pelicula.FechaLanzamiento.ToString("dd MMM yyyy")</b></p>
-
-    @if (MostrarBotones)
-    {
-        @* <button class="btn btn-outline-dark"
-        @onclick="Eliminar">
-            Borrar
-        </button> *@
-        
-        @* <button class="btn btn-outline-dark"
-        @onclick="EliminarPelicula">
-            Borrar
-        </button> *@
-        
-        <button class="btn btn-outline-dark"
-        @onclick="@( ()=> EliminarPelicula.InvokeAsync( Pelicula) )">
-            Borrar
-        </button>
-    }
-
-
+    <div>
+        <a class="btn btn-infor">Editar</a>
+        <button 
+            type="button" 
+            class="btn btn-danger"
+            onclick=@( ()=> EliminarPelicula.InvokeAsync(Pelicula) )
+        >Borrar</button>
+    </div>
 </div>
 
 @code {
@@ -36,13 +21,7 @@
     public Pelicula Pelicula { get; set; } = null!;
 
     [Parameter]
-    public bool MostrarBotones { get; set; } = false;
-
-    [Parameter]
     public EventCallback<Pelicula> EliminarPelicula { get; set; }
 
-    // private void Eliminar()
-    // {
-    //     Console.WriteLine($"Eliminando la pelicula {Pelicula.Titulo} ");
-    // }
+    
 }

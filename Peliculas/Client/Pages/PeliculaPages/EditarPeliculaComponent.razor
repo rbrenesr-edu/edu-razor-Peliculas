@@ -1,7 +1,8 @@
-﻿@page "/peliculas/editar"
+﻿@page "/pelicula/editar/{PeliculaId:int}"
+
 
 <h3>EditarPeliculaComponent</h3>
 
 @code {
-
+    [Parameter] public int PeliculaId { get; set; }
 }

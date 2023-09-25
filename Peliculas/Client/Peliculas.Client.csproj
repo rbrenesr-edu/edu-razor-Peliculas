@@ -7,12 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.9" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Shared\Peliculas.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <BlazorWebAssemblyLazyLoad Include="MathNet.Numerics.dll" />
   </ItemGroup>
 
 </Project>

@@ -10,6 +10,8 @@ namespace Peliculas.Shared.Entities
     public class Genero
     {
         public int ID { get; set; }
+
+
         [Required(ErrorMessage = "El campo {0} es requerido.")]
         public string Nombre { get; set; }
     }

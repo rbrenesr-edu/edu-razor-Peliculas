@@ -2,6 +2,28 @@
 
 <h3>EditarGeneroComponent</h3>
 
+<FormularioGeneroComponent Genero="Genero" OnValidSubmit="Editar" />
+
 @code {
     [Parameter] public int GeneroId { get; set; }
+
+    private Genero? Genero;
+
+    protected override void OnInitialized()
+    {
+        Genero = new Genero()
+            {
+                ID = GeneroId,
+                Nombre = "Acción"
+            };
+    }
+
+
+    private void Editar()
+    {
+        Console.WriteLine("Ejecutando el método editar.");
+        Console.WriteLine($"ID del género: { Genero!.ID }, Nombre del género: {Genero.Nombre}");
+    }
+
+
 }

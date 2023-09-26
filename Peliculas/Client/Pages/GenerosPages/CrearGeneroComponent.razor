@@ -1,16 +1,23 @@
 ﻿@page "/generos/crear"
+@inject NavigationManager navigationManager;
 
 <h3>CrearGeneroComponent</h3>
 
-<FormularioGeneroComponent Genero="Genero" OnValidSubmit="Crear" />
+<FormularioGeneroComponent 
+    @ref="formularioGeneroComponent"
+    Genero="Genero" 
+    OnValidSubmit="Crear" />
 
 @code {
     private Genero Genero = new Genero();
-    
+    private FormularioGeneroComponent formularioGeneroComponent = null!;
+
     private void Crear()
     {
         Console.WriteLine("Ejecutando el método crear.");
         Console.WriteLine($"Nombre del género: { Genero.Nombre }");
+        formularioGeneroComponent.isTheFormProcessedSuccessfully = true;
+        navigationManager.NavigateTo("generos");
     }
 
 }

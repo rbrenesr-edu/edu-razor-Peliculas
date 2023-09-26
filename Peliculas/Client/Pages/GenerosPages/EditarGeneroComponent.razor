@@ -1,13 +1,18 @@
 ﻿@page "/generos/editar/{GeneroId:int}"
+@inject NavigationManager navigationManager;
 
 <h3>EditarGeneroComponent</h3>
 
-<FormularioGeneroComponent Genero="Genero" OnValidSubmit="Editar" />
+<FormularioGeneroComponent 
+    @ref="formularioGeneroComponent" 
+    Genero="Genero" 
+    OnValidSubmit="Editar" />
 
 @code {
     [Parameter] public int GeneroId { get; set; }
 
     private Genero? Genero;
+    private FormularioGeneroComponent formularioGeneroComponent = null!;
 
     protected override void OnInitialized()
     {
@@ -18,12 +23,11 @@
             };
     }
 
-
     private void Editar()
     {
         Console.WriteLine("Ejecutando el método editar.");
         Console.WriteLine($"ID del género: { Genero!.ID }, Nombre del género: {Genero.Nombre}");
+        formularioGeneroComponent.isTheFormProcessedSuccessfully = true;
+        navigationManager.NavigateTo("generos");
     }
-
-
 }

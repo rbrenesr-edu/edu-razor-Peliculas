@@ -1,4 +1,5 @@
-﻿@inject IJSRuntime iJSRuntime;
+﻿@inject SweetAlertService swal;
+
 <NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation"></NavigationLock>
 
 
@@ -52,7 +53,16 @@
         }
 
 
-        var confirmando = await iJSRuntime.Confirm("Deseas abandonar la página y perder los cambios?");
+        var resultado = await swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Confirmación",
+                Text = "Deseas abandonar la página y perder los cambios ? ",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true
+            });
+
+        var confirmando = !string.IsNullOrEmpty(resultado.Value);
+
 
         if (confirmando)
         {

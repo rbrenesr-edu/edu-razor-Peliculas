@@ -2,6 +2,14 @@
 
 <h3>CrearActorComponent</h3>
 
+<FormularioActoresComponent Actor="Actor" OnValidSubmit="Crear" />
+
 @code {
+    private Actor Actor = new Actor();
+
+    private void Crear()
+    {
+        Console.WriteLine("Crear actor");
+    }
 
 }

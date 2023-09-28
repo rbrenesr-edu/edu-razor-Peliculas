@@ -1,7 +1,35 @@
 ﻿@page "/actores/editar/{ActorId:int}"
+@inject NavigationManager navigationManager;
 
 <h3>EditarActorComponent</h3>
 
+<FormularioActoresComponent Actor="Actor" OnValidSubmit="Editar" />
+
 @code {
     [Parameter] public int ActorId { get; set; }
+
+
+
+
+    private Actor? Actor;
+    private FormularioActoresComponent formularioActoresComponent = null!;
+
+    protected override void OnInitialized()
+    {
+        Actor = new Actor()
+            {
+                Id = ActorId,
+                Nombre = "Rafael",
+                FechaNacimiento = DateTime.Today
+            };
+    }
+
+    private void Editar()
+    {
+        Console.WriteLine("Ejecutando el método editar actor.");
+        Console.WriteLine($"ID del actor: {Actor!.Id}, Nombre del actor: {Actor.Nombre}");
+        // formularioActoresComponent.isTheFormProcessedSuccessfully = true;
+        navigationManager.NavigateTo("actores");
+    }
+
 }

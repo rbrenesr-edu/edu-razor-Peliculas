@@ -23,9 +23,8 @@
     </div>
 
 
-    <div class="mb-3">
-        
-        <h3>Biografía</h3>
+    <div class="mb-3 form-markdown">       
+        <InputMarkDownComponent @bind-Value="@Actor.Biografia" For="@(()=> Actor.Biografia)" Label="Biograf[ia"/>
     </div>
 
     <button class="btn btn-success">Guardar Cambios</button>

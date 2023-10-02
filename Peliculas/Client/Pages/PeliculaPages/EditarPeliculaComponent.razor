@@ -1,8 +1,26 @@
 ﻿@page "/pelicula/editar/{PeliculaId:int}"
+@inject NavigationManager navigationManager
 
 
 <h3>EditarPeliculaComponent</h3>
 
+<FormularioPeliculasComponent Pelicula="Pelicula" OnValidSubmit="Editar" />
+
 @code {
     [Parameter] public int PeliculaId { get; set; }
+
+    private Pelicula Pelicula = new Pelicula();
+
+
+    protected override void OnInitialized()
+    {
+        Pelicula = new Pelicula { Id = PeliculaId , Titulo = "Mi Pelicula"};
+    }
+
+    private void Editar()
+    {
+        Console.WriteLine($"Editando pelicula : {PeliculaId}");
+ 
+    }
+
 }

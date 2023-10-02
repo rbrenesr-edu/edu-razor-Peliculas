@@ -2,12 +2,12 @@
 @inject NavigationManager navigationManager
 
 <h3>CrearPeliculaComponent</h3>
-<button
-    class="btn btn-outline-primary"    
-    @onclick="Crear"
->Crear</button>
+
+<FormularioPeliculasComponent Pelicula="Pelicula" OnValidSubmit="Crear"/>
 
 @code {
+    private Pelicula Pelicula = new Pelicula();
+
     private void Crear()
     {
         Console.WriteLine(navigationManager.BaseUri);

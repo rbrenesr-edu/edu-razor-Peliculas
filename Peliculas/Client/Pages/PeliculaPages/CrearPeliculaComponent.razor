@@ -3,10 +3,24 @@
 
 <h3>CrearPeliculaComponent</h3>
 
-<FormularioPeliculasComponent Pelicula="Pelicula" OnValidSubmit="Crear"/>
+<FormularioPeliculasComponent Pelicula="Pelicula" OnValidSubmit="Crear" GenerosNoSeleccionados="GenerosNoSeleccionados"/>
 
 @code {
     private Pelicula Pelicula = new Pelicula();
+    private List<Genero> GenerosNoSeleccionados = new List<Genero>();
+
+    protected override void OnInitialized()
+    {
+        GenerosNoSeleccionados = new List<Genero>()
+        {
+            new Genero(){ ID = 1, Nombre = "Comedia" },
+            new Genero(){ ID = 2, Nombre = "Drama" },
+            new Genero(){ ID = 3, Nombre = "Acción" },
+            new Genero(){ ID = 4, Nombre = "Sci-fi" },
+
+        };
+    }
+
 
     private void Crear()
     {
@@ -15,3 +29,5 @@
         navigationManager.NavigateTo("pelicula");
     }
 }
+
+

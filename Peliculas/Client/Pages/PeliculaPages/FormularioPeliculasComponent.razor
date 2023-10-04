@@ -5,7 +5,7 @@
         <label>Titulo</label>
         <div>
             <InputText class="form-control" @bind-Value="@Pelicula.Titulo" />
-            <ValidationMessage For="@(()=> Pelicula.Titulo)"/>
+            <ValidationMessage For="@(()=> Pelicula.Titulo)" />
         </div>
     </div>
 
@@ -41,31 +41,33 @@
         </div>
     </div>
 
+    <div class="mb-3">
+        <label>ctores</label>
+        <div>
+            <SelectorMultipleTypeaheadComponent Context="Actor" SearchMethod="BuscarActores" ElementosSeleccionados="ActoresSeleccionados">
+                <MyListTemplate>@Actor.Nombre</MyListTemplate>
+                <MyResultTemplate>
+                    <img style="width:50px;" src="@Actor.Foto" />
+                    @Actor.Nombre
+                </MyResultTemplate>
+            </SelectorMultipleTypeaheadComponent>
+        </div>
+    </div>
+
     <button class="btn btn-success">Guardar Cambios</button>
 
 </EditForm>
 
 @code {
+    [Parameter, EditorRequired] public Pelicula Pelicula { get; set; } = null!;
+    [Parameter, EditorRequired] public EventCallback OnValidSubmit { get; set; }
+    [Parameter, EditorRequired] public List<Genero> GenerosNoSeleccionados { get; set; } = new List<Genero>();
+    [Parameter] public List<Genero> GenerosSeleccionados { get; set; } = new List<Genero>();
+    [Parameter] public List<Actor> ActoresSeleccionados { get; set; } = new List<Actor>();
+
     private string? imagenUrl;
-
-    [Parameter]
-    [EditorRequired]
-    public Pelicula Pelicula { get; set; } = null!;
-
-    [Parameter]
-    [EditorRequired]
-    public EventCallback OnValidSubmit { get; set; }
-
-    [Parameter]    
-    public List<Genero> GenerosSeleccionados { get; set; } = new List<Genero>();
-
-    [Parameter]
-    [EditorRequired]
-    public List<Genero> GenerosNoSeleccionados { get; set; } = new List<Genero>();
-
     public List<SelectorMultipleModel> Seleccionados { get; set; } = new List<SelectorMultipleModel>();
     public List<SelectorMultipleModel> NoSeleccionados { get; set; } = new List<SelectorMultipleModel>();
-
 
     protected override void OnInitialized()
     {
@@ -75,16 +77,25 @@
             Pelicula.Poster = null;
         }
 
-
-        Seleccionados = GenerosSeleccionados.Select(x => new SelectorMultipleModel( x.ID.ToString(), x.Nombre)).ToList();
+        Seleccionados = GenerosSeleccionados.Select(x => new SelectorMultipleModel(x.ID.ToString(), x.Nombre)).ToList();
         NoSeleccionados = GenerosNoSeleccionados.Select(x => new SelectorMultipleModel(x.ID.ToString(), x.Nombre)).ToList();
-
     }
 
     private void ImagenSeleccionada(string imagenBase64)
     {
         Pelicula.Poster = imagenBase64;
         imagenUrl = null;
+    }
+
+    private async Task<IEnumerable<Actor>> BuscarActores(string searchText)
+    {
+        return new List<Actor>()
+        {
+            new Actor{ Id=1, Nombre="Arnold Schwarzenegger", FechaNacimiento=DateTime.Today, Foto="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Arnold_Schwarzenegger_in_Sydney%2C_2013.jpg/230px-Arnold_Schwarzenegger_in_Sydney%2C_2013.jpg", Biografia=""},
+            new Actor{ Id=2, Nombre="Jackie Chan", FechaNacimiento=DateTime.Today, Foto="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Jackie_Chan_July_2016.jpg/220px-Jackie_Chan_July_2016.jpg", Biografia=""},
+            new Actor{ Id=3, Nombre="Bruce Willis", FechaNacimiento=DateTime.Today, Foto="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Bruce_Willis_by_Gage_Skidmore_3.jpg/220px-Bruce_Willis_by_Gage_Skidmore_3.jpg", Biografia=""},
+            new Actor{ Id=4, Nombre="Chuck Norris", FechaNacimiento=DateTime.Today, Foto="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Chuck_Norris_May_2015.jpg/220px-Chuck_Norris_May_2015.jpg", Biografia=""},
+        };
     }
 
 }

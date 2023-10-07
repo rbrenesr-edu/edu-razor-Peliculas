@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+<<<<<<< HEAD
 using Peliculas.Shared.Entities;
+=======
+>>>>>>> 2707e72b680dd5335ce8efbb436de9d0f079accf
 
 namespace Peliculas.Server
 {
@@ -8,6 +11,7 @@ namespace Peliculas.Server
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
+<<<<<<< HEAD
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,5 +25,7 @@ namespace Peliculas.Server
         public DbSet<Pelicula> Peliculas => Set<Pelicula>();
         public DbSet<GeneroPelicula> GenerosPeliculas => Set<GeneroPelicula>();
         public DbSet<PeliculaActor> PeliculasActor => Set<PeliculaActor>();
+=======
+>>>>>>> 2707e72b680dd5335ce8efbb436de9d0f079accf
     }
 }

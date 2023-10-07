@@ -14,5 +14,7 @@ namespace Peliculas.Shared.Entities
 
         [Required(ErrorMessage = "El campo {0} es requerido.")]
         public string Nombre { get; set; }
+        
+        public List<GeneroPelicula> GenerosPelicula { get; set; } = new List<GeneroPelicula>();
     }
 }

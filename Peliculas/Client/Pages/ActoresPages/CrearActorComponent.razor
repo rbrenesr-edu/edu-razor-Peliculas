@@ -1,4 +1,7 @@
 ﻿@page "/actores/crear"
+@inject NavigationManager navigationManager;
+@inject IRepositorio repositorio
+@inject SweetAlertService swal
 
 <h3>CrearActorComponent</h3>
 
@@ -7,9 +10,19 @@
 @code {
     private Actor Actor = new Actor();
 
-    private void Crear()
+    private async Task Crear()
     {
-        Console.WriteLine("Crear actor");
-    }
+        var httpResponse = await repositorio.Post("api/actores", Actor);
 
+        if (httpResponse.Error)
+        {
+            var mensajeError = await httpResponse.ObtenerMensajeError();
+            await swal.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+        }
+        else
+        {            
+            navigationManager.NavigateTo("generos");
+        }
+
+    }
 }

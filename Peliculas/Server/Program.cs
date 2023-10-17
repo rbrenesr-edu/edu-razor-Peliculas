@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Peliculas.Server;
+using Peliculas.Server.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer("name=DefaultConnection"));
+builder.Services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosAzStorage>();
+
 
 var app = builder.Build();
 

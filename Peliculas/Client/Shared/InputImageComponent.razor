@@ -41,8 +41,9 @@
         {
             var arrBytes = new byte[imagen.Size];
             await imagen.OpenReadStream().ReadAsync(arrBytes);
-            imagenBase64 = Convert.ToBase64String(arrBytes);
+            imagenBase64 = Convert.ToBase64String(arrBytes);            
             ImagenUrl = null;
+            await ImagenSeleccionada.InvokeAsync(imagenBase64);
             StateHasChanged();
         }
     }

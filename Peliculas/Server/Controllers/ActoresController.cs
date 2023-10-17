@@ -27,7 +27,7 @@ namespace Peliculas.Server.Controllers
             if (!string.IsNullOrWhiteSpace(actor.Foto))
             {
                 var fotoActor = Convert.FromBase64String(actor.Foto);
-                actor.Foto = await almacenadorArchivos.GuardarArchivo(fotoActor, "jpg", contenedor);
+                actor.Foto = await almacenadorArchivos.GuardarArchivo(fotoActor, ".jpg", contenedor);
             }
 
             context.Add(actor);

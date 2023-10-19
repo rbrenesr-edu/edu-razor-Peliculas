@@ -5,22 +5,26 @@
 
 <h3>CrearPeliculaComponent</h3>
 
-<FormularioPeliculasComponent Pelicula="Pelicula" OnValidSubmit="Crear" GenerosNoSeleccionados="GenerosNoSeleccionados"/>
+@if (MostrarFormulario)
+{
+    <FormularioPeliculasComponent Pelicula="Pelicula" OnValidSubmit="Crear" GenerosNoSeleccionados="GenerosNoSeleccionados" />
+}else
+{
+    <p>Cargando...</p>
+}
+
 
 @code {
     private Pelicula Pelicula = new Pelicula();
     private List<Genero> GenerosNoSeleccionados = new List<Genero>();
+    public bool MostrarFormulario { get; set; } = false;
 
-    protected override void OnInitialized()
+    protected async override Task OnInitializedAsync()
     {
-        GenerosNoSeleccionados = new List<Genero>()
-        {
-            new Genero(){ ID = 1, Nombre = "Comedia" },
-            new Genero(){ ID = 2, Nombre = "Drama" },
-            new Genero(){ ID = 3, Nombre = "Acción" },
-            new Genero(){ ID = 4, Nombre = "Sci-fi" },
+        var respuesta = await repositorio.Get<List<Genero>>("api/generos");
 
-        };
+        GenerosNoSeleccionados = respuesta.Response!;
+        MostrarFormulario = true;
     }
 
 
@@ -36,7 +40,7 @@
         else
         {
             var peliculaId = httpResponse.Response;
-            navigationManager.NavigateTo($"/pelicula/{peliculaId}/{Pelicula.Titulo.Replace(" ","-")}");
+            navigationManager.NavigateTo($"/pelicula/{peliculaId}/{Pelicula.Titulo.Replace(" ", "-")}");
         }
 
     }

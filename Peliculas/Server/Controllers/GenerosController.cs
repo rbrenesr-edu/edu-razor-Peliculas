@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Peliculas.Shared.Entities;
 
 namespace Peliculas.Server.Controllers
@@ -18,6 +19,12 @@ namespace Peliculas.Server.Controllers
             context.Add(genero);
             await context.SaveChangesAsync();
             return genero.ID;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Genero>>> Get()
+        {
+            return await context.Generos.ToListAsync();
         }
 
     }

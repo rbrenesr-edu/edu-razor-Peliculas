@@ -35,12 +35,20 @@ else if (Listado.Count < 1)
     {
         @SinPeliculasRenderFragment
     }
-}else
+}
+else
 {
-    @foreach (var elemento in Listado)
+    if (HayRegistros is not null)
     {
-        @HayRegistros(elemento)
+        @foreach (var elemento in Listado)
+        {
+            @HayRegistros(elemento)
+        }
+    }else
+    {
+        @HayRegistrosCompleto
     }
+
 }
 
 @code {
@@ -51,9 +59,13 @@ else if (Listado.Count < 1)
     [Parameter]
     public RenderFragment? SinPeliculasRenderFragment { get; set; }
 
-    [Parameter][EditorRequired]
+    [Parameter]
+    [EditorRequired]
     public List<Titem>? Listado { get; set; }
 
     [Parameter]
     public RenderFragment<Titem> HayRegistros { get; set; } = null!;
+
+    [Parameter]
+    public RenderFragment HayRegistrosCompleto { get; set; } = null!;
 }

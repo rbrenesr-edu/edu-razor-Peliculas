@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Peliculas.Server.Helpers;
 using Peliculas.Shared.Entities;
 
@@ -33,6 +34,12 @@ namespace Peliculas.Server.Controllers
             context.Add(actor);
             await context.SaveChangesAsync();
             return actor.Id;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Actor>>> Get()
+        {
+            return await context.Actores.ToListAsync();
         }
     }
 }

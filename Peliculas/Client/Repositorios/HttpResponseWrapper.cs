@@ -3,7 +3,10 @@
 namespace Peliculas.Client.Repositorios
 {
     public class HttpResponseWrapper<T>
-    {
+    {       
+        public bool Error { get; set; }
+        public T? Response { get; set; }
+        public HttpResponseMessage? HttpResponseMessage { get; set; }
 
         public HttpResponseWrapper(bool error, T? response, HttpResponseMessage? httpResponseMessage)
         {
@@ -11,10 +14,6 @@ namespace Peliculas.Client.Repositorios
             Response = response;
             HttpResponseMessage = httpResponseMessage;
         }
-
-        public bool Error { get; set; }
-        public T? Response { get; set; }
-        public HttpResponseMessage? HttpResponseMessage { get; set; }
 
         public async Task<string?> ObtenerMensajeError()
         {

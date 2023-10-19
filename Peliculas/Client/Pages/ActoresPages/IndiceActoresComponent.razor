@@ -1,4 +1,5 @@
 ﻿@page "/actores"
+@inject IRepositorio repositorio
 
 <h3>IndiceActoresComponent</h3>
 
@@ -6,6 +7,39 @@
     <a href="actores/crear" class="btn btn-info">Crear Actor</a>
 </div>
 
-@code {
+<ListadoGenericoComponent Listado="Actores">
+    <HayRegistrosCompleto>
+        <table class="table table-strriped">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Nombre</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Actores!)
+                {
+                    <tr>
+                        <td>
+                            <a class="btn btn-success">E</a>
+                            <button class="btn btn-danger">D</button>
+                        </td>
+                        <td>
+                            @item.Nombre
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </HayRegistrosCompleto>
+</ListadoGenericoComponent>
 
+@code {
+    private List<Actor>? Actores { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        var respuesta = await repositorio.Get<List<Actor>>("api/actores");
+        Actores = respuesta.Response!;
+    }
 }

@@ -7,7 +7,6 @@ namespace Peliculas.Client.Repositorios
     public class Repositorio : IRepositorio
     {
         private readonly HttpClient httpClient;
-
         private JsonSerializerOptions optionsJSON = new JsonSerializerOptions { 
             PropertyNameCaseInsensitive = true
             };
@@ -15,6 +14,8 @@ namespace Peliculas.Client.Repositorios
         public Repositorio(HttpClient httpClient) {
             this.httpClient = httpClient;
         }
+
+
 
         public async Task<HttpResponseWrapper<object>> Post<T>(string url, T enviar) {
             var enviarJSON = JsonSerializer.Serialize(enviar);
@@ -38,9 +39,18 @@ namespace Peliculas.Client.Repositorios
             return new HttpResponseWrapper<TResponse>(!responseHttp.IsSuccessStatusCode,  default, responseHttp);
         }
 
-        private async Task<T> DeserealizarRespuesta<T>(HttpResponseMessage httpResponseMessage, JsonSerializerOptions jsonSerializerOptions) { 
-            var respuestaString = await httpResponseMessage.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<T>(respuestaString, jsonSerializerOptions);
+        public async Task<HttpResponseWrapper<T>> Get<T>(string url) {
+
+            var responseHttp = await httpClient.GetAsync(url);
+
+            if (responseHttp.IsSuccessStatusCode)
+            {
+                var response = await DeserealizarRespuesta<T>(responseHttp, optionsJSON);
+                return new HttpResponseWrapper<T>(error: false, response, responseHttp);
+            }
+
+
+            return new HttpResponseWrapper<T>(!responseHttp.IsSuccessStatusCode, default, responseHttp);
         }
 
         public List<Pelicula> ObtenerPeliculas()
@@ -63,6 +73,14 @@ namespace Peliculas.Client.Repositorios
                     Poster="https://upload.wikimedia.org/wikipedia/en/2/2e/Inception_%282010%29_theatrical_poster.jpg"
                 }
             };
+        }
+
+
+
+        private async Task<T> DeserealizarRespuesta<T>(HttpResponseMessage httpResponseMessage, JsonSerializerOptions jsonSerializerOptions)
+        {
+            var respuestaString = await httpResponseMessage.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<T>(respuestaString, jsonSerializerOptions)!;
         }
     }
 }

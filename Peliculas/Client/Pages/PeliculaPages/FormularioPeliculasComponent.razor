@@ -1,4 +1,6 @@
-﻿<EditForm Model="Pelicula" OnValidSubmit="OnValidSubmit">
+﻿<EditForm 
+    Model="Pelicula" 
+    OnValidSubmit="OnDataAnnotationValidated">
     <DataAnnotationsValidator />
 
     <div class="mb-3">
@@ -14,6 +16,14 @@
         <div>
             <InputCheckbox @bind-Value="@Pelicula.EnCartelera" />
             <ValidationMessage For="@(()=> Pelicula.EnCartelera)" />
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label>Trailer</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@Pelicula.Trailer" />
+            <ValidationMessage For="@(()=> Pelicula.Trailer)" />
         </div>
     </div>
 
@@ -42,10 +52,10 @@
     </div>
 
     <div class="mb-3">
-        <label>ctores</label>
+        <label>Actores</label>
         <div>
             <SelectorMultipleTypeaheadComponent Context="Actor" SearchMethod="BuscarActores" ElementosSeleccionados="ActoresSeleccionados">
-                <MyListTemplate>@Actor.Nombre</MyListTemplate>
+                <MyListTemplate>@Actor.Nombre / <input type="text" placeholder="Personaje" @bind="Actor.Personaje" /> </MyListTemplate>
                 <MyResultTemplate>
                     <img style="width:50px;" src="@Actor.Foto" />
                     @Actor.Nombre
@@ -98,4 +108,11 @@
         };
     }
 
+
+    private async Task OnDataAnnotationValidated()
+    {
+        Pelicula.GenerosPelicula = Seleccionados.Select(x => new GeneroPelicula { GeneroId = int.Parse(x.Llave) }).ToList();
+        Pelicula.PeliculasActor = ActoresSeleccionados.Select(x => new PeliculaActor { ActorId = x.Id, Personaje = x.Personaje }).ToList();
+        await OnValidSubmit.InvokeAsync();
+    }
 }

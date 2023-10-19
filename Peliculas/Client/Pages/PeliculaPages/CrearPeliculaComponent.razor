@@ -1,5 +1,7 @@
 ﻿@page "/peliculas/crear"
 @inject NavigationManager navigationManager
+@inject IRepositorio repositorio
+@inject SweetAlertService swall
 
 <h3>CrearPeliculaComponent</h3>
 
@@ -22,11 +24,21 @@
     }
 
 
-    private void Crear()
+    private async Task Crear()
     {
-        Console.WriteLine(navigationManager.BaseUri);
-        Console.WriteLine(navigationManager.Uri);
-        navigationManager.NavigateTo("pelicula");
+        var httpResponse = await repositorio.Post<Pelicula, int>("api/peliculas", Pelicula);
+
+        if (httpResponse.Error)
+        {
+            var mensajeError = await httpResponse.ObtenerMensajeError();
+            await swall.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+        }
+        else
+        {
+            var peliculaId = httpResponse.Response;
+            navigationManager.NavigateTo($"/pelicula/{peliculaId}/{Pelicula.Titulo.Replace(" ","-")}");
+        }
+
     }
 }
 

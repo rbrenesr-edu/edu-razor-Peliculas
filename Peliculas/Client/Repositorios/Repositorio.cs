@@ -7,6 +7,11 @@ namespace Peliculas.Client.Repositorios
     public class Repositorio : IRepositorio
     {
         private readonly HttpClient httpClient;
+
+        private JsonSerializerOptions optionsJSON = new JsonSerializerOptions { 
+            PropertyNameCaseInsensitive = true
+            };
+
         public Repositorio(HttpClient httpClient) {
             this.httpClient = httpClient;
         }
@@ -16,6 +21,26 @@ namespace Peliculas.Client.Repositorios
             var enviarContent = new StringContent(enviarJSON, Encoding.UTF8, "application/json");
             var responseHttp = await httpClient.PostAsync(url, enviarContent);
             return new HttpResponseWrapper<object>(!responseHttp.IsSuccessStatusCode, null,responseHttp);
+        }
+
+        public async Task<HttpResponseWrapper<TResponse>> Post<T, TResponse>(string url, T enviar)
+        {
+            var enviarJSON = JsonSerializer.Serialize(enviar);
+            var enviarContent = new StringContent(enviarJSON, Encoding.UTF8, "application/json");
+            var responseHttp = await httpClient.PostAsync(url, enviarContent);
+
+            if (responseHttp.IsSuccessStatusCode) {
+                var response = await DeserealizarRespuesta<TResponse>(responseHttp, optionsJSON);
+                return new HttpResponseWrapper<TResponse>(error: false, response, responseHttp);
+            }
+
+
+            return new HttpResponseWrapper<TResponse>(!responseHttp.IsSuccessStatusCode,  default, responseHttp);
+        }
+
+        private async Task<T> DeserealizarRespuesta<T>(HttpResponseMessage httpResponseMessage, JsonSerializerOptions jsonSerializerOptions) { 
+            var respuestaString = await httpResponseMessage.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<T>(respuestaString, jsonSerializerOptions);
         }
 
         public List<Pelicula> ObtenerPeliculas()

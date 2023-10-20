@@ -29,6 +29,14 @@ namespace Peliculas.Server.Controllers
                 pelicula.Poster = await almacenadorArchivos.GuardarArchivo(peliculaPoster, ".jpg", contenedor);
             }
 
+            if(pelicula.PeliculasActor is not null)
+            {
+                for (int i = 0; i < pelicula.PeliculasActor.Count; i++)
+                {
+                    pelicula.PeliculasActor[i].Orden = i + 1;
+                }
+            }
+
             context.Add(pelicula);
             await context.SaveChangesAsync();
             return pelicula.Id;
@@ -61,6 +69,42 @@ namespace Peliculas.Server.Controllers
             };
 
             return result;
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<PeliculaVisualizarDTO>> Get(int id) {
+
+            var pelicula = await context.Peliculas
+                .Where(pelicula => pelicula.Id == id)
+                .Include(pelicula => pelicula.GenerosPelicula)
+                    .ThenInclude(gp => gp.Genero)
+                 .Include(pelicula => pelicula.PeliculasActor.OrderBy(pa => pa.Orden))
+                    .ThenInclude(pl => pl.Actor)
+                .FirstOrDefaultAsync();
+
+            if (pelicula is null)
+            {
+                return NotFound();
+            }
+
+            // TODO: Sistema de votación
+            var promedioVoto = 4;
+            var votoUsuario = 5;
+
+            var modelo = new PeliculaVisualizarDTO();
+            modelo.Pelicula = pelicula;
+            modelo.Generos = pelicula.GenerosPelicula.Select(x => x.Genero!).ToList();
+            modelo.Actores = pelicula.PeliculasActor.Select( x => new Actor { 
+                Nombre = x.Actor!.Nombre,
+                Foto = x.Actor.Foto,
+                Personaje = x.Actor.Personaje,
+                Id = x.Actor.Id
+            }).ToList();
+
+            modelo.VotoUsuario = votoUsuario;
+            modelo.PromedioVotos = promedioVoto;
+
+            return modelo;
         }
     }
 }

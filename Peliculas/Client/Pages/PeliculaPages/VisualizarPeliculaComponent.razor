@@ -1,18 +1,40 @@
 ﻿@page "/pelicula/{PeliculaId:int}"
 @page "/pelicula/{PeliculaId:int}/{NombrePelicula}"
+@inject IRepositorio repositorio
+@inject SweetAlertService swal
+
 
 <h3>VisualizarPeliculaComponent</h3>
 
+@if (modelo is null)
+{
+    <p>Cargando...</p>
+}
+else
+{
+    <h2>@modelo.Pelicula.Titulo ( @modelo.Pelicula.Lanzamiento!.Value.ToString("yyyy") )</h2>
+}
+
+
 @code {
-    [Parameter]
-    public int PeliculaId { get; set; }
+    [Parameter] public int PeliculaId { get; set; }
+    [Parameter] public string? NombrePelicula { get; set; }
+    private PeliculaVisualizarDTO? modelo;
 
-    [Parameter]
-    public string? NombrePelicula { get; set; }
-
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine($"El id de la pelicula es: { PeliculaId } y el nombre es { NombrePelicula }");
+        var repuestHttp = await repositorio.Get<PeliculaVisualizarDTO>($"api/peliculas/{PeliculaId}");
+
+        if (repuestHttp.Error)
+        {
+            var mensajeError = await repuestHttp.ObtenerMensajeError();
+            await swal.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+        }
+        else
+        {
+            modelo = repuestHttp.Response;
+        }
+
     }
 
 }

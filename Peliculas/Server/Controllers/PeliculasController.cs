@@ -94,10 +94,11 @@ namespace Peliculas.Server.Controllers
             var modelo = new PeliculaVisualizarDTO();
             modelo.Pelicula = pelicula;
             modelo.Generos = pelicula.GenerosPelicula.Select(x => x.Genero!).ToList();
-            modelo.Actores = pelicula.PeliculasActor.Select( x => new Actor { 
+            modelo.Actores = pelicula.PeliculasActor.Select( x => new Actor 
+            { 
                 Nombre = x.Actor!.Nombre,
                 Foto = x.Actor.Foto,
-                Personaje = x.Actor.Personaje,
+                Personaje = x.Personaje,
                 Id = x.Actor.Id
             }).ToList();
 

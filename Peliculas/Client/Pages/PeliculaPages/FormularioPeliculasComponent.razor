@@ -1,4 +1,6 @@
-﻿<EditForm 
+﻿@inject IRepositorio repositorio
+
+<EditForm 
     Model="Pelicula" 
     OnValidSubmit="OnDataAnnotationValidated">
     <DataAnnotationsValidator />
@@ -99,13 +101,10 @@
 
     private async Task<IEnumerable<Actor>> BuscarActores(string searchText)
     {
-        return new List<Actor>()
-        {
-            new Actor{ Id=1, Nombre="Arnold Schwarzenegger", FechaNacimiento=DateTime.Today, Foto="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Arnold_Schwarzenegger_in_Sydney%2C_2013.jpg/230px-Arnold_Schwarzenegger_in_Sydney%2C_2013.jpg", Biografia=""},
-            new Actor{ Id=2, Nombre="Jackie Chan", FechaNacimiento=DateTime.Today, Foto="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Jackie_Chan_July_2016.jpg/220px-Jackie_Chan_July_2016.jpg", Biografia=""},
-            new Actor{ Id=3, Nombre="Bruce Willis", FechaNacimiento=DateTime.Today, Foto="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Bruce_Willis_by_Gage_Skidmore_3.jpg/220px-Bruce_Willis_by_Gage_Skidmore_3.jpg", Biografia=""},
-            new Actor{ Id=4, Nombre="Chuck Norris", FechaNacimiento=DateTime.Today, Foto="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Chuck_Norris_May_2015.jpg/220px-Chuck_Norris_May_2015.jpg", Biografia=""},
-        };
+
+        var respuestaHttp = await repositorio.Get<List<Actor>>($"api/actores/buscar/{searchText}");
+
+        return respuestaHttp!.Response!;
     }
 
 

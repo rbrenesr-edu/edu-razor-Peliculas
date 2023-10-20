@@ -6,8 +6,13 @@
 <PageTitle>Blazor Películas</PageTitle>
 
 <div>
-    <h3>Películas</h3>
-    <ListadoPaliculasComponent Peliculas="Peliculas" />
+    <h3>En cartelera</h3>
+    <ListadoPaliculasComponent Peliculas="PeliculasEnCartelera" />
+</div>
+
+<div>
+    <h3>Próximos Extrenos</h3>
+    <ListadoPaliculasComponent Peliculas="ProximosExtrenos" />
 </div>
 
 
@@ -15,10 +20,14 @@
 
     public List<Pelicula>? Peliculas { get; set; }
 
- 
-    protected override void OnInitialized()
+    public List<Pelicula>? PeliculasEnCartelera { get; set; }
+    public List<Pelicula>? ProximosExtrenos { get; set; }
+
+    protected override async Task OnInitializedAsync()
     {
-        Peliculas = repositorio.ObtenerPeliculas();
+        var respuestaHttp = await repositorio.Get<HomePageDTO>("api/peliculas");
+        PeliculasEnCartelera = respuestaHttp.Response!.PeliculasEnCartelera;
+        ProximosExtrenos = respuestaHttp.Response!.ProximosExtrenos;
     }
 
 }

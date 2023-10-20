@@ -41,5 +41,21 @@ namespace Peliculas.Server.Controllers
         {
             return await context.Actores.ToListAsync();
         }
+
+        [HttpGet("buscar/{textoBuscar}")]
+        public async Task<ActionResult<IEnumerable<Actor>>> Get(string textoBuscar)
+        {
+            if (string.IsNullOrWhiteSpace(textoBuscar))
+            {
+                return new List<Actor>();
+            }
+
+            return await context.Actores
+                .Where(actor => actor.Nombre!.ToLower().Contains(textoBuscar.ToLower()))
+                .OrderByDescending(actor => actor.Nombre)  // Agrega la cláusula OrderBy aquí
+                .Take(5)
+                .ToListAsync();
+
+        }
     }
 }

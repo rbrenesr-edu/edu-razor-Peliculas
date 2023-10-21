@@ -20,6 +20,8 @@ builder.Services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosAzStorage
 builder.Services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosLocalStorage>();
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddAutoMapper(typeof(Program));
+
 
 var app = builder.Build();
 

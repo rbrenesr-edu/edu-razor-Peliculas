@@ -1,35 +1,65 @@
 ﻿@page "/actores/editar/{ActorId:int}"
 @inject NavigationManager navigationManager;
+@inject IRepositorio repositorio
+@inject SweetAlertService swal
 
 <h3>EditarActorComponent</h3>
 
-<FormularioActoresComponent Actor="Actor" OnValidSubmit="Editar" />
+
+@if (Actor is null)
+{
+    <p>Cargando...</p>
+}
+else
+{
+    <FormularioActoresComponent Actor="Actor" OnValidSubmit="Editar" />
+}
+
+
 
 @code {
     [Parameter] public int ActorId { get; set; }
-
-
-
-
     private Actor? Actor;
     private FormularioActoresComponent formularioActoresComponent = null!;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        Actor = new Actor()
+        var respuestaHttp = await repositorio.Get<Actor>($"api/actores/{ActorId}");
+
+        if (respuestaHttp.Error)
+        {
+            if (respuestaHttp.HttpResponseMessage!.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                Id = ActorId,
-                Nombre = "Rafael",
-                FechaNacimiento = DateTime.Today
-            };
+                navigationManager.NavigateTo("actores");
+            }
+            else
+            {
+                var mensajeError = await respuestaHttp.ObtenerMensajeError();
+                await swal.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+            }
+        }
+        else
+        {
+            Actor = respuestaHttp.Response;
+        }
+
     }
 
-    private void Editar()
+
+
+    private async Task Editar()
     {
-        Console.WriteLine("Ejecutando el método editar actor.");
-        Console.WriteLine($"ID del actor: {Actor!.Id}, Nombre del actor: {Actor.Nombre}");
-        // formularioActoresComponent.isTheFormProcessedSuccessfully = true;
-        navigationManager.NavigateTo("actores");
+        var respuestaHttp = await repositorio.Put("api/actores/", Actor);
+
+        if (respuestaHttp.Error)
+        {
+            var mensajeError = await respuestaHttp.ObtenerMensajeError();
+            await swal.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+        }
+        else
+        {            
+            navigationManager.NavigateTo("actores");
+        }
     }
 
 }

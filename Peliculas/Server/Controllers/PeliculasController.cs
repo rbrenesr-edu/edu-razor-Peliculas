@@ -107,5 +107,13 @@ namespace Peliculas.Server.Controllers
 
             return modelo;
         }
+
+        [HttpPut]
+        public async Task<ActionResult> Put(Actor actor)
+        {
+            context.Update(actor);
+            await context.SaveChangesAsync();
+            return NoContent();
+        }
     }
 }

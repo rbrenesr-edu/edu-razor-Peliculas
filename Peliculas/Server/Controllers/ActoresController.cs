@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using AutoMapper.Configuration.Annotations;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Peliculas.Server.Helpers;
@@ -13,12 +15,14 @@ namespace Peliculas.Server.Controllers
 
         private readonly ApplicationDbContext context;
         private readonly IAlmacenadorArchivos almacenadorArchivos;
+        private readonly IMapper mapper;
         private readonly string contenedor = "personas";
 
-        public ActoresController(ApplicationDbContext context, IAlmacenadorArchivos almacenadorArchivos)
+        public ActoresController(ApplicationDbContext context, IAlmacenadorArchivos almacenadorArchivos, IMapper mapper )
         {
             this.context = context;
             this.almacenadorArchivos = almacenadorArchivos;
+            this.mapper = mapper;
         }
 
 
@@ -42,6 +46,20 @@ namespace Peliculas.Server.Controllers
             return await context.Actores.ToListAsync();
         }
 
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Actor>> Get(int id)
+        {
+            //return await context.Generos.Where(x => x.ID == id).FirstOrDefaultAsync();
+            var actor = await context.Actores.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (actor is null)
+            {
+                return NotFound();
+            }
+
+            return actor;
+        }
+
         [HttpGet("buscar/{textoBuscar}")]
         public async Task<ActionResult<IEnumerable<Actor>>> Get(string textoBuscar)
         {
@@ -56,6 +74,27 @@ namespace Peliculas.Server.Controllers
                 .Take(5)
                 .ToListAsync();
 
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> Put(Actor actor)
+        {
+            var actorBD = await context.Actores.FirstOrDefaultAsync(x => x.Id == actor.Id);
+
+            if (actorBD is null) {
+                return NotFound();
+            }
+
+            actorBD = mapper.Map(actor,actorBD);
+
+            if (!string.IsNullOrWhiteSpace(actor.Foto)) {
+                var fotoActor = Convert.FromBase64String(actor.Foto);
+                actorBD.Foto = await almacenadorArchivos.EditarArchivo(
+                    fotoActor, ".jpg", contenedor, actorBD.Foto!);
+            }
+            
+            await context.SaveChangesAsync();
+            return NoContent();
         }
     }
 }

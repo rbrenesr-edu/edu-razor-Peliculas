@@ -2,25 +2,30 @@
 @inject NavigationManager navigationManager
 
 
-<h3>EditarPeliculaComponent</h3>
+<h3>EditarPelicula</h3>
 
-<FormularioPeliculasComponent Pelicula="Pelicula" OnValidSubmit="Editar" />
+<FormularioPeliculasComponent Pelicula="Pelicula"
+                              OnValidSubmit="Editar"
+                              GenerosNoSeleccionados="GenerosNoSeleccionados"
+                              GenerosSeleccionados="GenerosSeleccionados" />
 
 @code {
     [Parameter] public int PeliculaId { get; set; }
-
     private Pelicula Pelicula = new Pelicula();
+    private List<Genero> GenerosNoSeleccionados = new List<Genero>();
+    private List<Genero> GenerosSeleccionados = new List<Genero>();
+
 
 
     protected override void OnInitialized()
     {
-        Pelicula = new Pelicula { Id = PeliculaId , Titulo = "Mi Pelicula"};
+        Pelicula = new Pelicula { Id = PeliculaId, Titulo = "Mi Pelicula" };
     }
 
     private void Editar()
     {
         Console.WriteLine($"Editando pelicula : {PeliculaId}");
- 
+
     }
 
 }

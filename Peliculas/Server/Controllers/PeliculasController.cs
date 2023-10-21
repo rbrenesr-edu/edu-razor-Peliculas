@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using Peliculas.Server.Helpers;
 using Peliculas.Shared.DTOs;
 using Peliculas.Shared.Entities;
@@ -106,6 +107,27 @@ namespace Peliculas.Server.Controllers
             modelo.PromedioVotos = promedioVoto;
 
             return modelo;
+        }
+
+        [HttpGet("actualizar/{id}")]
+        public async Task<ActionResult<PeliculaActualizacionDTO>> PutGet(int id) {
+            var peliculaActionresult = await Get(id);
+            if (peliculaActionresult.Result is NotFoundResult) { return NotFound(); }
+
+            var peliculaBase = peliculaActionresult.Value;
+            var generosSeleccionadosIds = peliculaBase!.Generos.Select(x=>x.ID).ToList();
+            var generosNoSeleccionados = await context.Generos
+                .Where(x => !generosSeleccionadosIds.Contains(x.ID))
+                .ToListAsync();
+
+            var modelo = new PeliculaActualizacionDTO();
+            modelo.Pelicula = peliculaBase.Pelicula;
+            modelo.GenerosSeleccionados = peliculaBase.Generos;
+            modelo.GenerosNoSeleccionados = generosNoSeleccionados;
+            modelo.Actores = peliculaBase.Actores;
+
+            return modelo;
+
         }
 
         [HttpPut]

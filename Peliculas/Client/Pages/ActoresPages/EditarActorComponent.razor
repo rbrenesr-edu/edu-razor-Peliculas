@@ -49,7 +49,7 @@ else
 
     private async Task Editar()
     {
-        var respuestaHttp = await repositorio.Put("api/actores/", Actor);
+        var respuestaHttp = await repositorio.Put("api/actores", Actor);
 
         if (respuestaHttp.Error)
         {

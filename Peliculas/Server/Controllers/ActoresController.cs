@@ -43,7 +43,7 @@ namespace Peliculas.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Actor>>> Get()
         {
-            return await context.Actores.ToListAsync();
+            return await context.Actores.OrderBy(x=>x.Nombre).ToListAsync();
         }
 
         [HttpGet("{id:int}")]

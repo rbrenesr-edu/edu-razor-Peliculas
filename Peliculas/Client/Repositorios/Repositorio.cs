@@ -39,6 +39,14 @@ namespace Peliculas.Client.Repositorios
             return new HttpResponseWrapper<TResponse>(!responseHttp.IsSuccessStatusCode,  default, responseHttp);
         }
 
+        public async Task<HttpResponseWrapper<object>> Put<T>(string url, T enviar)
+        {
+            var enviarJSON = JsonSerializer.Serialize(enviar);
+            var enviarContent = new StringContent(enviarJSON, Encoding.UTF8, "application/json");
+            var responseHttp = await httpClient.PutAsync(url, enviarContent);
+            return new HttpResponseWrapper<object>(!responseHttp.IsSuccessStatusCode, null, responseHttp);
+        }
+
         public async Task<HttpResponseWrapper<T>> Get<T>(string url) {
 
             var responseHttp = await httpClient.GetAsync(url);

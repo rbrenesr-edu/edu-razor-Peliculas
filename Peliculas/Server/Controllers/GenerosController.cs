@@ -27,5 +27,25 @@ namespace Peliculas.Server.Controllers
             return await context.Generos.ToListAsync();
         }
 
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Genero>> Get(int id) {
+            //return await context.Generos.Where(x => x.ID == id).FirstOrDefaultAsync();
+            var genero =  await context.Generos.FirstOrDefaultAsync(x => x.ID == id);
+
+            if (genero is null)
+            {
+                return NotFound();
+            }
+
+            return genero;
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> Put(Genero genero) { 
+            context.Update(genero);
+            await context.SaveChangesAsync();
+            return NoContent();
+        }
+
     }
 }

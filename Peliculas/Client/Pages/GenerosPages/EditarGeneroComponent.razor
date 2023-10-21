@@ -1,12 +1,20 @@
 ﻿@page "/generos/editar/{GeneroId:int}"
 @inject NavigationManager navigationManager;
+@inject IRepositorio repositorio
+@inject SweetAlertService swal
 
 <h3>EditarGeneroComponent</h3>
 
-<FormularioGeneroComponent 
-    @ref="formularioGeneroComponent" 
-    Genero="Genero" 
-    OnValidSubmit="Editar" />
+@if (Genero is null)
+{
+    <p>Cargando...</p>
+}
+else
+{
+    <FormularioGeneroComponent @ref="formularioGeneroComponent"
+                               Genero="Genero"
+                               OnValidSubmit="Editar" />
+}
 
 @code {
     [Parameter] public int GeneroId { get; set; }
@@ -14,20 +22,44 @@
     private Genero? Genero;
     private FormularioGeneroComponent formularioGeneroComponent = null!;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        Genero = new Genero()
+        var respuestaHttp = await repositorio.Get<Genero>($"api/generos/{GeneroId}");
+
+        if (respuestaHttp.Error)
+        {
+            if (respuestaHttp.HttpResponseMessage!.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                ID = GeneroId,
-                Nombre = "Acción"
-            };
+                navigationManager.NavigateTo("generos");
+            }
+            else
+            {
+                var mensajeError = await respuestaHttp.ObtenerMensajeError();
+                await swal.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+            }
+        }
+        else
+        {
+            Genero = respuestaHttp.Response;
+        }
+
     }
 
-    private void Editar()
+    private async Task Editar()
     {
-        Console.WriteLine("Ejecutando el método editar.");
-        Console.WriteLine($"ID del género: { Genero!.ID }, Nombre del género: {Genero.Nombre}");
-        formularioGeneroComponent.isTheFormProcessedSuccessfully = true;
-        navigationManager.NavigateTo("generos");
+        var respuestaHttp = await repositorio.Put("api/generos/", Genero);
+
+        if (respuestaHttp.Error)
+        {
+
+            var mensajeError = await respuestaHttp.ObtenerMensajeError();
+            await swal.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+
+        }
+        else
+        {
+            formularioGeneroComponent.isTheFormProcessedSuccessfully = true;
+            navigationManager.NavigateTo("generos");
+        }
     }
 }

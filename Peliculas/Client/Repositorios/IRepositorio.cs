@@ -4,6 +4,7 @@ namespace Peliculas.Client.Repositorios
 {
     public interface IRepositorio
     {
+        Task<HttpResponseWrapper<object>> Delete(string url);
         Task<HttpResponseWrapper<T>> Get<T>(string url);
         List<Pelicula> ObtenerPeliculas();
         Task<HttpResponseWrapper<object>> Post<T>(string url, T enviar);

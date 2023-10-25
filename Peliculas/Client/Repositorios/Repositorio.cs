@@ -61,6 +61,11 @@ namespace Peliculas.Client.Repositorios
             return new HttpResponseWrapper<T>(!responseHttp.IsSuccessStatusCode, default, responseHttp);
         }
 
+        public async Task<HttpResponseWrapper<object>> Delete(string url) {
+            var responseHttp = await httpClient.DeleteAsync(url);
+            return new HttpResponseWrapper<object>(!responseHttp.IsSuccessStatusCode, null, responseHttp);
+        }
+
         public List<Pelicula> ObtenerPeliculas()
         {
             return new List<Pelicula>()
@@ -82,8 +87,6 @@ namespace Peliculas.Client.Repositorios
                 }
             };
         }
-
-
 
         private async Task<T> DeserealizarRespuesta<T>(HttpResponseMessage httpResponseMessage, JsonSerializerOptions jsonSerializerOptions)
         {

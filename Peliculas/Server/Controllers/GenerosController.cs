@@ -47,5 +47,23 @@ namespace Peliculas.Server.Controllers
             return NoContent();
         }
 
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id) {
+            var rowsAfected = await context.Generos
+                .Where(x => x.ID == id)
+                .ExecuteDeleteAsync();
+
+
+            if (rowsAfected == 0)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+
+
+        }
+
+
     }
 }

@@ -1,10 +1,12 @@
 ﻿@inject IJSRuntime js;
+@inject SweetAlertService swal
+@inject IRepositorio repositorio
 
 <div style="display:flex; flex-wrap:wrap; align-items:center;">
 
     <ListadoGenericoComponent Listado="Peliculas">
         <HayRegistros Context="pelicula">
-            <PeliculaComponent Pelicula=pelicula                              
+            <PeliculaComponent Pelicula=pelicula
                                EliminarPelicula="ElininarPelicula" />
         </HayRegistros>
     </ListadoGenericoComponent>
@@ -22,12 +24,27 @@
 
     private async Task ElininarPelicula(Pelicula pelicula)
     {
-        bool confirmado = await js.Confirm($"Desea borrar la pelicula {pelicula.Titulo } ?");
-        js.Clg("Texto");
+        bool confirmado = await js.Confirm($"Desea borrar la pelicula {pelicula.Titulo} ?");
+
 
         if (confirmado)
         {
-            Peliculas!.Remove(pelicula);
+            var responseHttp = await repositorio.Delete($"api/peliculas/{pelicula.Id}");
+
+            if (responseHttp.Error)
+            {
+
+                var mensajeError = await responseHttp.ObtenerMensajeError();
+                await swal.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+
+            }
+            else
+            {
+                Peliculas!.Remove(pelicula);
+            }
+
+
+           
         }
 
     }

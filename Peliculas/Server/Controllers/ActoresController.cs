@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Peliculas.Server.Helpers;
+using Peliculas.Shared.DTOs;
 using Peliculas.Shared.Entities;
 
 namespace Peliculas.Server.Controllers
@@ -40,10 +41,16 @@ namespace Peliculas.Server.Controllers
             return actor.Id;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Actor>>> Get()
+        [HttpGet] //[FromQuery]PaginacionDTO paginacion    =>  url?pagina=1&cantidadRegistros=10
+        public async Task<ActionResult<IEnumerable<Actor>>> Get([FromQuery]PaginacionDTO paginacion)
         {
-            return await context.Actores.OrderBy(x=>x.Nombre).ToListAsync();
+            //return await context.Actores.OrderBy(x=>x.Nombre).ToListAsync();
+            var queryable = context.Actores.AsQueryable();
+
+            await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadRegistros);
+
+            return await queryable.OrderBy(x=>x.Nombre).Paginar(paginacion).ToListAsync();
+
         }
 
         [HttpGet("{id:int}")]

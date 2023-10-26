@@ -9,6 +9,12 @@
     <a href="actores/crear" class="btn btn-info">Crear Actor</a>
 </div>
 
+<PaginacionComponent
+    PaginaActual="@paginaActual"
+    PaginasTotales="@paginasTotales"
+    PaginaSeleccionada="@PaginaSeleccionada"
+    ></PaginacionComponent>
+
 <ListadoGenericoComponent Listado="Actores">
     <HayRegistrosCompleto>
         <table class="table table-strriped">
@@ -39,15 +45,30 @@
 @code {
     private List<Actor>? Actores { get; set; }
 
+
+
+    private int paginaActual = 1;
+    private int paginasTotales;
+
+
+
+
     protected async override Task OnInitializedAsync()
     {
         await Cargar();
     }
 
-    private async Task Cargar()
+    private async Task Cargar(int pagina = 1)
     {
-        var respuesta = await repositorio.Get<List<Actor>>("api/actores");
+        var respuesta = await repositorio.Get<List<Actor>>($"api/actores?pagina={pagina}");
         Actores = respuesta.Response!;
+        paginasTotales = int.Parse(respuesta.HttpResponseMessage!.Headers.GetValues("totalPaginas").FirstOrDefault()!);
+    }
+
+    private async Task PaginaSeleccionada(int pagina)
+    {
+        paginaActual = pagina;
+        await Cargar(pagina);
     }
 
     private async Task Borrar(Actor actor)

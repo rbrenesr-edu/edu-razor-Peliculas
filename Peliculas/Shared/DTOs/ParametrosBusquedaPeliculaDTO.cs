@@ -23,5 +23,5 @@ namespace Peliculas.Shared.DTOs
         public bool Estrenos { get; set; }
         public bool MasVotados { get; set; }
     }
-    }
+    
 }

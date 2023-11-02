@@ -1,5 +1,6 @@
 ﻿@page "/peliculas/buscar";
 @inject IRepositorio repositorio;
+@inject NavigationManager navigationManager
 
 <h3>FiltroPeliculasComponent</h3>
 
@@ -54,17 +55,33 @@
 
     private string titulo { get; set; } = "";
     private string generoSeleccionado { get; set; } = "0";
+    private int pagionaActual = 1;
+
     private bool futurosEstrenos { get; set; } = false;
     private bool enCartelera { get; set; } = false;
     private bool masVotadas { get; set; } = false;
 
+    private Dictionary<string, string> queryDictionary = new Dictionary<string, string>();
     private List<Genero> generos = new List<Genero>();
     public List<Pelicula> Peliculas { get; set; } = null!;
 
-    protected override void OnInitialized()
+
+
+
+
+
+    protected override async Task OnInitializedAsync()
     {
+        await ObtenerGeneros();
         Peliculas = repositorio.ObtenerPeliculas();
     }
+
+    private async Task ObtenerGeneros()
+    {
+        var respuestaHttp = await repositorio.Get<List<Genero>>("api/generos");
+        generos = respuestaHttp.Response!;
+    }
+
 
     private void TituloKeyPress(KeyboardEventArgs e)
     {
@@ -76,14 +93,31 @@
 
     private void CargarNuevasPeliculas()
     {
-        Peliculas = repositorio.ObtenerPeliculas()
-        .Where(x => x.Titulo.ToLower().Contains(titulo.ToLower())).ToList();
+        var queryString = GenerarQueryString();
+        navigationManager.NavigateTo("/peliculas/buscar?" + queryString);
+    }
 
-        Console.WriteLine($"titulo: {titulo}");
-        Console.WriteLine($"generoSe1eccionado: {generoSeleccionado}");
-        Console.WriteLine($"enCarte1era: {enCartelera}");
-        Console.WriteLine($"futurosEstrenos: {futurosEstrenos}");
-        Console.WriteLine($"masVotadas: {masVotadas}");
+    private string GenerarQueryString()
+    {
+        if (queryDictionary is null)
+        {
+            queryDictionary = new Dictionary<string, string>();
+        }
+
+        queryDictionary["genneroid"] = generoSeleccionado;
+        queryDictionary["titulo"] = titulo;
+        queryDictionary["encartelera"] = enCartelera.ToString();
+        queryDictionary["estrenos"] = futurosEstrenos.ToString();
+        queryDictionary["masvotados"] = masVotadas.ToString();
+        queryDictionary["pagiona"] = pagionaActual.ToString();
+
+        //valores por defecto
+        var valoresPorDefecto = new List<string> { "false","","0"};
+
+        return string.Join("&", queryDictionary.Where(x => 
+                                                       !valoresPorDefecto.Contains(x.Value.ToLower()))
+                                                .Select(x => $"{x.Key}={System.Web.HttpUtility.UrlEncode(x.Value)}")
+                                                .ToArray());
     }
 
     private void LimpiarOnClick()

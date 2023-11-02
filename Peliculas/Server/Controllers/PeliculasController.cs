@@ -179,5 +179,55 @@ namespace Peliculas.Server.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("filtrar")]
+        public async Task<ActionResult<List<Pelicula>>> Get([FromQuery] ParametrosBusquedaPeliculaDTO modelo) { 
+            //Ejecución diferida: permite armar y ejecutar las consultas de forma dinámica
+
+            var peliculasQueryable = context.Peliculas.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(modelo.Titulo))
+            {
+                peliculasQueryable = peliculasQueryable
+                    .Where(x => x.Titulo.Contains(modelo.Titulo));
+            }
+
+            if (modelo.EnCartelra)
+            {
+                peliculasQueryable = peliculasQueryable
+                    .Where(x => x.EnCartelera);
+            }
+
+            if (modelo.EnCartelra)
+            {
+                peliculasQueryable = peliculasQueryable
+                    .Where(x => x.EnCartelera);
+            }
+
+            if (modelo.Estrenos)
+            {
+                var hoy = DateTime.Today;
+
+                peliculasQueryable = peliculasQueryable
+                    .Where(x => x.Lanzamiento >= hoy);
+            }
+
+            if (modelo.GeneroId != 0)
+            {
+                peliculasQueryable = peliculasQueryable
+                    .Where(x => x.GenerosPelicula
+                                .Select(y => y.GeneroId)
+                                .Contains(modelo.GeneroId)
+                          );
+            }
+
+            //TODO Implementar Votacion
+
+
+            await HttpContext.InsertarParametrosPaginacionEnRespuesta(peliculasQueryable, modelo.CantidadRegistros);
+            var peliculas = await peliculasQueryable.Paginar(modelo.PaginacionDTO).ToListAsync();
+            return peliculas;
+        }
+
     }
 }

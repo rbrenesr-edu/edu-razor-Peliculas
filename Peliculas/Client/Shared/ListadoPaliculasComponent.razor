@@ -7,7 +7,7 @@
     <ListadoGenericoComponent Listado="Peliculas">
         <HayRegistros Context="pelicula">
             <PeliculaComponent Pelicula=pelicula
-                               EliminarPelicula="ElininarPelicula" />
+                               EliminarPelicula="ElininarPelicula" @key="pelicula.Id"/>
         </HayRegistros>
     </ListadoGenericoComponent>
 

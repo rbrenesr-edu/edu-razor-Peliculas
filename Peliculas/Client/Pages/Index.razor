@@ -5,6 +5,15 @@
 
 <PageTitle>Blazor Películas</PageTitle>
 
+<AuthorizeView Roles="admin">
+    <Authorized>
+        <p>Estás autenticado, @context.User.Identity?.Name</p>
+    </Authorized>
+    <NotAuthorized>
+        <p>No autenticado</p>
+    </NotAuthorized>
+</AuthorizeView>
+
 <div>
     <h3>En cartelera</h3>
     <ListadoPaliculasComponent Peliculas="PeliculasEnCartelera" />

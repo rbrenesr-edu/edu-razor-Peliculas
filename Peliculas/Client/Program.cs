@@ -22,5 +22,10 @@ void ConfigureServices(IServiceCollection services) {
     services.AddScoped<IRepositorio, Repositorio>();
     //services.AddSingleton<IRepositorio, Repositorio>();
     services.AddAuthorizationCore();
-    services.AddScoped<AuthenticationStateProvider, ProveedorAutenticacion>();
+
+    //services.AddScoped<AuthenticationStateProvider, ProveedorAutenticacion>();
+
+    services.AddScoped<ProveedorAutenticacionJWT>();
+    services.AddScoped<AuthenticationStateProvider, ProveedorAutenticacionJWT>(proveedor => proveedor.GetRequiredService<ProveedorAutenticacionJWT>());
+    services.AddScoped<ILoginServices, ProveedorAutenticacionJWT>(proveedor => proveedor.GetRequiredService<ProveedorAutenticacionJWT>());
 }   

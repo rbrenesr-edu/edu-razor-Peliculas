@@ -1,0 +1,14 @@
+﻿@page "/Logout"
+@using Peliculas.Client.Auth;
+@inject NavigationManager navigationManager
+@inject ILoginService loginService
+
+<p>Finalizando sesión...</p>
+
+@code {
+    protected async override Task OnInitializedAsync()
+    {
+        await loginService.Logout();
+        navigationManager.NavigateTo("");
+    }
+}

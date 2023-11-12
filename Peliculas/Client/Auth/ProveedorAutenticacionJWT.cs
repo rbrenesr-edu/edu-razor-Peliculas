@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 namespace Peliculas.Client.Auth
 {
-    public class ProveedorAutenticacionJWT : AuthenticationStateProvider, ILoginServices
+    public class ProveedorAutenticacionJWT : AuthenticationStateProvider, ILoginService
     {
         public static readonly string TOKENKEY = "token";
         private readonly IJSRuntime js;

@@ -1,6 +1,6 @@
 ﻿namespace Peliculas.Client.Auth
 {
-    public interface ILoginServices
+    public interface ILoginService
     {
         Task Login(string token);
         Task Logout();

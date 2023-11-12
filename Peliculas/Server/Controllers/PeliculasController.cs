@@ -12,6 +12,7 @@ namespace Peliculas.Server.Controllers
 {
     [ApiController]
     [Route("api/peliculas")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PeliculasController : ControllerBase
     {
         private readonly ApplicationDbContext context;
@@ -56,7 +57,7 @@ namespace Peliculas.Server.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [AllowAnonymous]        
         public async Task<ActionResult<HomePageDTO>> Get()
         {
 
@@ -86,6 +87,7 @@ namespace Peliculas.Server.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [AllowAnonymous]
         public async Task<ActionResult<PeliculaVisualizarDTO>> Get(int id) {
 
             var pelicula = await context.Peliculas
@@ -123,6 +125,7 @@ namespace Peliculas.Server.Controllers
         }
 
         [HttpGet("actualizar/{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<PeliculaActualizacionDTO>> PutGet(int id) {
             var peliculaActionresult = await Get(id);
             if (peliculaActionresult.Result is NotFoundResult) { return NotFound(); }

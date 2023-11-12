@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.Configuration.Annotations;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,8 +11,9 @@ using Peliculas.Shared.Entities;
 
 namespace Peliculas.Server.Controllers
 {
-    [Route("api/actores")]
     [ApiController]
+    [Route("api/actores")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ActoresController : ControllerBase        
     {
 

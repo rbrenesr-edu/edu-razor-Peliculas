@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Peliculas.Shared.Entities;
 
 namespace Peliculas.Server.Controllers
 {
-    [Route("api/generos")]
     [ApiController]
+    [Route("api/generos")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class GenerosController: ControllerBase
     {
         private readonly ApplicationDbContext context;
@@ -22,6 +25,7 @@ namespace Peliculas.Server.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Genero>>> Get()
         {
             return await context.Generos.ToListAsync();

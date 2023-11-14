@@ -212,6 +212,7 @@ namespace Peliculas.Server.Controllers
         }
 
         [HttpGet("filtrar")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<Pelicula>>> Get([FromQuery] ParametrosBusquedaPeliculaDTO modelo) { 
             //Ejecución diferida: permite armar y ejecutar las consultas de forma dinámica
 
@@ -252,7 +253,10 @@ namespace Peliculas.Server.Controllers
                           );
             }
 
-            //TODO Implementar Votacion
+            if (modelo.MasVotados)
+            {
+                peliculasQueryable = peliculasQueryable.OrderByDescending(p => p.VotosPeliculas.Average(vp => vp.Voto));
+            }
 
 
             await HttpContext.InsertarParametrosPaginacionEnRespuesta(peliculasQueryable, modelo.CantidadRegistros);

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
@@ -18,15 +19,17 @@ namespace Peliculas.Server.Controllers
         private readonly ApplicationDbContext context;
         private readonly IAlmacenadorArchivos almacenadorArchivos;
         private readonly IMapper mapper;
+        private readonly UserManager<IdentityUser> userManager;
         private readonly string contenedor = "peliculas";
 
         public PeliculasController(ApplicationDbContext context, 
             IAlmacenadorArchivos almacenadorArchivos,
-            IMapper mapper)
+            IMapper mapper, UserManager<IdentityUser> userManager)
         {
             this.context = context;
             this.almacenadorArchivos = almacenadorArchivos;
             this.mapper = mapper;
+            this.userManager = userManager;
         }
 
         [HttpPost]
@@ -102,10 +105,32 @@ namespace Peliculas.Server.Controllers
             {
                 return NotFound();
             }
+            
+            var promedioVoto = 0.0;
+            var votoUsuario = 0;
 
-            // TODO: Sistema de votación
-            var promedioVoto = 4;
-            var votoUsuario = 3;
+            if (await context.VotsPeliculas.AnyAsync( x => x.PeliculaId == id ) )
+            {
+                promedioVoto = await context.VotsPeliculas.Where( x => x.PeliculaId == id ).AverageAsync( x => x.Voto );
+
+                if (HttpContext.User.Identity!.IsAuthenticated)
+                {
+                    var usuario = await userManager.FindByEmailAsync(HttpContext.User.Identity!.Name!);
+
+                    if (usuario is null)
+                    {
+                        return BadRequest("Usuario no encontrado!");
+                    }
+
+                    var usuarioID = usuario.Id;
+                    var votoUsuarioBD = await context.VotsPeliculas.FirstOrDefaultAsync( x => x.PeliculaId == id && x.UsuarioId == usuarioID);
+
+                    if (votoUsuarioBD is not null)
+                    {
+                        votoUsuario = votoUsuarioBD.Voto;
+                    }
+                }
+            }
 
             var modelo = new PeliculaVisualizarDTO();
             modelo.Pelicula = pelicula;

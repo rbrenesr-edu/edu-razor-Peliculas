@@ -20,7 +20,7 @@ else
     <span>
         | @modelo.Pelicula.Lanzamiento!.Value.ToString("dd MM yyyy")
         | Promedio: @modelo.PromedioVotos.ToString("0.#")/5
-        | Tu voto: <RatingComponent MaximoPuntage="5" PuntageSeleccionado="modelo.VotoUsuario"></RatingComponent>
+        | Tu voto: <RatingComponent MaximoPuntage="5" PuntageSeleccionado="modelo.VotoUsuario" OnRating="OnRating"></RatingComponent>
     </span>
 
     <div class="d-flex mt-2">
@@ -79,6 +79,28 @@ else
             modelo = repuestHttp.Response;
         }
 
+    }
+
+    private async Task OnRating(int votoSeleccionado)
+    {
+        modelo!.VotoUsuario = votoSeleccionado;
+        var vpDTO = new VotoPeliculaDTO()
+            {
+                PeliculaId = PeliculaId,
+                Voto = votoSeleccionado
+            };
+
+        var respuestaHttp = await repositorio.Post("api/votos", vpDTO);
+
+        if (respuestaHttp.Error)
+        {
+            var mensajeError = await respuestaHttp.ObtenerMensajeError();
+            await swal.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+        }
+        else
+        {
+            await swal.FireAsync("Éxito", "Su voto ha sido recibido", SweetAlertIcon.Success);
+        }
     }
 
 }

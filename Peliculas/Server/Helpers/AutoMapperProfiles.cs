@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Peliculas.Shared.DTOs;
 using Peliculas.Shared.Entities;
 
 namespace Peliculas.Server.Helpers
@@ -11,6 +12,8 @@ namespace Peliculas.Server.Helpers
 
             CreateMap<Pelicula, Pelicula>()
                 .ForMember(x => x.Poster, option => option.Ignore());
+
+            CreateMap<VotoPeliculaDTO, VotoPelicula>();
         }
     }
 }

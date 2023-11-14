@@ -13,5 +13,6 @@ namespace Peliculas.Shared.Entities
         public DateTime FechaVoto { get; set; }
         public int PeliculaId { get; set; }
         public Pelicula? Pelicula { get; set; }
+        public string UsuarioId { get; set; }
     }
 }

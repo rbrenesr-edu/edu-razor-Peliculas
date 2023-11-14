@@ -105,7 +105,7 @@ namespace Peliculas.Server.Controllers
 
             // TODO: Sistema de votación
             var promedioVoto = 4;
-            var votoUsuario = 5;
+            var votoUsuario = 3;
 
             var modelo = new PeliculaVisualizarDTO();
             modelo.Pelicula = pelicula;

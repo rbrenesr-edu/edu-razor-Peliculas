@@ -20,7 +20,7 @@ else
     <span>
         | @modelo.Pelicula.Lanzamiento!.Value.ToString("dd MM yyyy")
         | Promedio: @modelo.PromedioVotos.ToString("0.#")/5
-        | Tu voto: @modelo.VotoUsuario.ToString()
+        | Tu voto: <RatingComponent MaximoPuntage="5" PuntageSeleccionado="modelo.VotoUsuario"></RatingComponent>
     </span>
 
     <div class="d-flex mt-2">

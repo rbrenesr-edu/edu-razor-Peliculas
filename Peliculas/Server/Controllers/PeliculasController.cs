@@ -13,7 +13,7 @@ namespace Peliculas.Server.Controllers
 {
     [ApiController]
     [Route("api/peliculas")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
     public class PeliculasController : ControllerBase
     {
         private readonly ApplicationDbContext context;

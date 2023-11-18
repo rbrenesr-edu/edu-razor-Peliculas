@@ -32,7 +32,7 @@ namespace Peliculas.Server.Controllers
 
             if (resultado.Succeeded)
             {
-                return BuildToken(model);
+                return await BuildToken(model);
             }
             else
             {
@@ -46,7 +46,7 @@ namespace Peliculas.Server.Controllers
 
             if (resultado.Succeeded)
             {
-                return BuildToken(model);
+                return await BuildToken(model);
             }
             else
             {
@@ -54,11 +54,19 @@ namespace Peliculas.Server.Controllers
             }
         }
 
-        private UserTokenDTO BuildToken(UserInfo userInfo) {
+        private async Task<UserTokenDTO> BuildToken(UserInfo userInfo) {
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, userInfo.Email)
             };
+
+            var usuario = await userManager.FindByEmailAsync(userInfo.Email);
+            var roles = await userManager.GetRolesAsync(usuario!);
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["jwtkey"]!));
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);  

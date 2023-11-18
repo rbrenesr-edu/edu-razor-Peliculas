@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Peliculas.Server.Helpers;
@@ -10,14 +11,17 @@ namespace Peliculas.Server.Controllers
 {
     [ApiController]
     [Route("api/usuarios")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
     public class UsuariosController : ControllerBase
     {
         private readonly ApplicationDbContext context;
+        private readonly UserManager<IdentityUser> userManager;
 
-        public UsuariosController(ApplicationDbContext context)
+        public UsuariosController(ApplicationDbContext context, 
+            UserManager<IdentityUser> userManager)
         {
             this.context = context;
+            this.userManager = userManager;
         }
 
         [HttpGet]
@@ -33,5 +37,41 @@ namespace Peliculas.Server.Controllers
 
 
         }
+
+
+        [HttpGet("roles")]
+        public async Task<ActionResult<List<RolDTO>>> Get() {
+            return await context.Roles
+                .Select( x => new RolDTO { Nombre = x.Name }).ToListAsync();
+        }
+
+        [HttpPost("asignarRol")]
+        public async Task<ActionResult> AsignarRolUsuario(EditarRolDTO editarRolDTO) {
+            var usuario = await userManager.FindByIdAsync(editarRolDTO.UsuarioId);
+
+            if (usuario is null)
+            {
+                return BadRequest("Usuario no existe.");
+            }
+
+            await userManager.AddToRoleAsync(usuario, editarRolDTO.Rol);
+            return NoContent();
+        }
+
+
+        [HttpPost("removerRol")]
+        public async Task<ActionResult> RemoverRolUsuario(EditarRolDTO editarRolDTO)
+        {
+            var usuario = await userManager.FindByIdAsync(editarRolDTO.UsuarioId);
+
+            if (usuario is null)
+            {
+                return BadRequest("Usuario no existe.");
+            }
+
+            await userManager.RemoveFromRoleAsync(usuario, editarRolDTO.Rol);
+            return NoContent();
+        }
+
     }
 }

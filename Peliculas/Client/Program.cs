@@ -28,4 +28,6 @@ void ConfigureServices(IServiceCollection services) {
     services.AddScoped<ProveedorAutenticacionJWT>();
     services.AddScoped<AuthenticationStateProvider, ProveedorAutenticacionJWT>(proveedor => proveedor.GetRequiredService<ProveedorAutenticacionJWT>());
     services.AddScoped<ILoginService, ProveedorAutenticacionJWT>(proveedor => proveedor.GetRequiredService<ProveedorAutenticacionJWT>());
+
+    services.AddScoped<RenovadorToken>();
 }   

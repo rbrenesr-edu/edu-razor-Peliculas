@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Peliculas.Shared.DTOs;
@@ -54,6 +56,13 @@ namespace Peliculas.Server.Controllers
             }
         }
 
+        [HttpGet("renovarToken")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<UserTokenDTO>> Renovar() {
+            var userInfo = new UserInfo() {  Email = HttpContext.User.Identity!.Name!};
+            return await BuildToken(userInfo);
+        }
+
         private async Task<UserTokenDTO> BuildToken(UserInfo userInfo) {
             var claims = new List<Claim>()
             {
@@ -71,6 +80,7 @@ namespace Peliculas.Server.Controllers
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["jwtkey"]!));
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);  
             var expiration = DateTime.UtcNow.AddYears(1);
+            //var expiration = DateTime.UtcNow.AddMinutes(1);
             var token = new JwtSecurityToken(
                 issuer: null,
                 audience: null,
